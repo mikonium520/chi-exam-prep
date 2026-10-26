@@ -1,4 +1,4 @@
-一一<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-HK">
 <head>
     <meta charset="UTF-8">
@@ -49,7 +49,7 @@
             <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-pastelBlue rounded-full opacity-50 pointer-events-none"></div>
 
             <h1 class="text-3xl md:text-4xl font-black text-pink-500 mb-2">🐾 歡迎來到詞語大冒險！🌟</h1>
-            <p class="text-gray-500 text-sm md:text-base mb-6">詞語與成語闖關特訓 (萌寵陪伴版)</p>
+            <p class="text-gray-500 text-sm md:text-base mb-6">詞語與成語闖關特訓 (名校呈分試專用題庫)</p>
 
             <!-- Name Input -->
             <div class="mb-5 text-left">
@@ -99,7 +99,7 @@
                     <span>📚 三年級中文 (P.3)</span>
                 </button>
                 <button type="button" id="btn-p6" class="w-full bg-gradient-to-r from-purple-400 to-indigo-400 text-white font-black py-4 px-6 rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all flex items-center justify-center space-x-2 text-lg">
-                    <span>🎓 六年級中文 (P.6)</span>
+                    <span>🎓 六年級名校題庫 (P.6)</span>
                 </button>
             </div>
         </div>
@@ -108,7 +108,7 @@
     <!-- Main Container -->
     <div id="main-app" class="max-w-5xl mx-auto px-4 py-6 hidden">
         
-        <!-- 2. 主頁頂部 (Header & Info Bar with Companion Avatar) -->
+        <!-- 2. 主頁頂部 (Header & Info Bar) -->
         <header class="bg-white/90 backdrop-blur rounded-3xl shadow-md p-5 mb-6 flex flex-col md:flex-row items-center justify-between border-2 border-pastelPink">
             <div class="flex items-center space-x-4 mb-4 md:mb-0">
                 <div id="pet-avatar-display" class="text-4xl bg-pink-100 p-3 rounded-2xl shadow-inner">🐶</div>
@@ -117,12 +117,16 @@
                     <p class="text-xs text-gray-500 font-semibold" id="header-subtitle">級別：三年級 | 萌寵：柴柴| 當前頭銜：詞語小萌新</p>
                 </div>
             </div>
-            <div class="flex items-center space-x-3">
+            <div class="flex flex-wrap gap-2 items-center">
+                <div class="flex bg-gray-100 p-1 rounded-2xl border border-gray-200">
+                    <button type="button" id="header-btn-p3" class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-pink-500 text-white shadow-sm">P.3 三年級</button>
+                    <button type="button" id="header-btn-p6" class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-gray-600 hover:text-gray-900">P.6 六年級</button>
+                </div>
                 <button type="button" id="btn-mistakes" class="bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold px-4 py-2.5 rounded-2xl text-sm transition-all flex items-center space-x-1 shadow-sm">
-                    <span>📖 查看錯題集</span>
+                    <span>📖 錯題集</span>
                 </button>
                 <button type="button" id="btn-home" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold px-4 py-2.5 rounded-2xl text-sm transition-all flex items-center space-x-1 shadow-sm">
-                    <span>🏠 返回主頁</span>
+                    <span>⚙️ 切換角色</span>
                 </button>
             </div>
         </header>
@@ -133,16 +137,16 @@
                 <!-- Card 1: 50 Core Vocabularies -->
                 <div class="bg-white/90 backdrop-blur rounded-3xl shadow-md p-6 border-2 border-pastelBlue flex flex-col justify-between">
                     <div>
-                        <div class="inline-block bg-blue-100 text-blue-700 font-bold px-3 py-1 rounded-xl text-xs mb-3">核心詞彙大挑戰</div>
-                        <h3 class="text-2xl font-black text-gray-800 mb-2">50 題核心詞語特訓</h3>
-                        <p class="text-gray-500 text-sm mb-6">包含 50 個不重覆核心詞語，涵蓋情境填充與標準釋義解析。</p>
+                        <div class="inline-block bg-blue-100 text-blue-700 font-bold px-3 py-1 rounded-xl text-xs mb-3">核心詞彙特訓</div>
+                        <h3 class="text-2xl font-black text-gray-800 mb-2" id="vocab-title">50 題核心詞語特訓</h3>
+                        <p class="text-gray-500 text-sm mb-6" id="vocab-desc">涵蓋情境填充與標準釋義解析，每局隨機抽取不重覆。</p>
                     </div>
                     <div class="space-y-3">
                         <button type="button" id="btn-vocab-choice" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-2xl shadow transition-all text-center">
-                            ⚡ 50題選擇題模式 (有選項)
+                            ⚡ 選擇題模式 (有選項)
                         </button>
                         <button type="button" id="btn-vocab-fill" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-4 rounded-2xl shadow transition-all text-center">
-                            ✍️ 50題不供詞填充 (文字輸入)
+                            ✍️ 不供詞填充 (文字輸入)
                         </button>
                     </div>
                 </div>
@@ -151,15 +155,15 @@
                 <div class="bg-white/90 backdrop-blur rounded-3xl shadow-md p-6 border-2 border-pastelPurple flex flex-col justify-between">
                     <div>
                         <div class="inline-block bg-purple-100 text-purple-700 font-bold px-3 py-1 rounded-xl text-xs mb-3">成語精靈特訓</div>
-                        <h3 class="text-2xl font-black text-gray-800 mb-2">15 題成語必考精選</h3>
-                        <p class="text-gray-500 text-sm mb-6">包含 15 個不重覆成語精華，深度掌握意境典故與正確運用語境。</p>
+                        <h3 class="text-2xl font-black text-gray-800 mb-2" id="idiom-title">15 題成語必考精選</h3>
+                        <p class="text-gray-500 text-sm mb-6" id="idiom-desc">深度掌握意境典故與名校呈分試語境，每局隨機抽取不重覆。</p>
                     </div>
                     <div class="space-y-3">
                         <button type="button" id="btn-idiom-choice" class="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-4 rounded-2xl shadow transition-all text-center">
-                            ⚡ 15題成語選擇題模式
+                            ⚡ 成語選擇題模式
                         </button>
                         <button type="button" id="btn-idiom-fill" class="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-4 rounded-2xl shadow transition-all text-center">
-                            ✍️ 15題成語不供詞填充 (文字輸入)
+                            ✍️ 成語不供詞填充 (文字輸入)
                         </button>
                     </div>
                 </div>
@@ -186,17 +190,20 @@
 
         <!-- Quiz Arena View -->
         <div id="quiz-view" class="hidden space-y-6">
-            <!-- Quiz Progress & Stage Header -->
-            <div class="bg-white/90 backdrop-blur rounded-3xl shadow-md p-5 border-2 border-pastelMint flex flex-col sm:flex-row items-center justify-between">
-                <div class="flex items-center space-x-3 mb-3 sm:mb-0">
+            <div class="bg-white/90 backdrop-blur rounded-3xl shadow-md p-5 border-2 border-pastelMint flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-start">
                     <div id="quiz-mode-badge" class="bg-green-100 text-green-700 font-bold px-3 py-1 rounded-xl text-xs">選擇題模式</div>
                     <div class="text-sm font-bold text-gray-600" id="quiz-progress-text">題目: 1 / 50</div>
                 </div>
-                <div class="flex items-center space-x-4 w-full sm:w-auto">
-                    <div class="w-full sm:w-48 bg-gray-100 rounded-full h-3 overflow-hidden">
+                <div class="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-end">
+                    <div class="w-32 sm:w-48 bg-gray-100 rounded-full h-3 overflow-hidden">
                         <div id="quiz-progress-bar" class="bg-green-400 h-full transition-all duration-300" style="width: 0%"></div>
                     </div>
                     <div class="text-sm font-black text-pink-500 whitespace-nowrap" id="quiz-score-display">得分: 0</div>
+                    
+                    <button type="button" id="btn-quiz-exit-home" class="bg-gray-100 hover:bg-rose-100 text-gray-700 hover:text-rose-600 font-bold px-3 py-1.5 rounded-xl text-xs transition-all flex items-center space-x-1 shadow-sm border border-gray-200">
+                        <span>🏠 返回主頁</span>
+                    </button>
                 </div>
             </div>
 
@@ -232,12 +239,12 @@
         </div>
     </div>
 
-    <!-- 5. 答題回饋彈窗 (Answer & Explanation Popup Modal) -->
+    <!-- 5. 答題回饋彈窗 (Answer Feedback Modal) -->
     <div id="feedback-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 hidden">
         <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 md:p-8 border-4 border-pastelPink text-center relative overflow-hidden">
             <div id="feedback-icon" class="text-5xl mb-3">🎉</div>
             <h3 id="feedback-title" class="text-2xl font-black text-gray-800 mb-2">答對了！</h3>
-            <p id="feedback-msg" class="text-gray-600 text-sm mb-4 font-semibold">你太棒了！正確答案是：<span id="correct-word-span" class="text-pink-600 font-bold"></span></p>
+            <p id="feedback-msg" class="text-gray-600 text-sm mb-4 font-semibold">正確答案是：<span id="correct-word-span" class="text-pink-600 font-bold"></span></p>
             
             <div class="bg-gray-50 rounded-2xl p-4 text-left mb-6 border border-gray-200">
                 <h5 class="text-xs font-bold text-gray-400 uppercase mb-1">標準字詞釋義</h5>
@@ -250,12 +257,12 @@
         </div>
     </div>
 
-    <!-- 階段休息喘息 Modal (Stage Break Modal) -->
+    <!-- 階段休息 Modal -->
     <div id="stage-break-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 hidden">
         <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 md:p-8 border-4 border-pastelBlue text-center">
             <div class="text-5xl mb-3" id="stage-break-pet-icon">🐶</div>
             <h3 class="text-2xl font-black text-blue-600 mb-2" id="stage-break-title">階段完成！</h3>
-            <p class="text-gray-600 text-sm mb-6" id="stage-break-desc">太厲害了！你已經順利完成了 10 道題目，萌寵陪你休息一下，喝杯水再繼續下一階段吧！</p>
+            <p class="text-gray-600 text-sm mb-6" id="stage-break-desc">太厲害了！喝杯水再繼續下一階段吧！</p>
             <div class="flex space-x-3">
                 <button type="button" id="btn-resume-quiz" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg hover:shadow-xl transition-all">
                     繼續挑戰下一階段 🚀
@@ -267,7 +274,7 @@
         </div>
     </div>
 
-    <!-- 遊戲結束結算 Modal (Game Complete Modal) -->
+    <!-- 遊戲結束結算 Modal -->
     <div id="game-over-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 hidden">
         <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 md:p-8 border-4 border-pastelYellow text-center">
             <div class="text-5xl mb-3">🏆</div>
@@ -290,14 +297,14 @@
         </div>
     </div>
 
-    <!-- 錯題集 Modal (Mistake Notebook Modal) -->
+    <!-- 錯題集 Modal -->
     <div id="mistake-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 hidden">
         <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full p-6 md:p-8 border-4 border-amber-200 flex flex-col max-h-[85vh]">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-xl font-black text-gray-800">📖 我的專屬錯題筆記本</h3>
                 <button type="button" id="btn-close-mistake" class="text-gray-400 hover:text-gray-600 text-xl font-bold">✕</button>
             </div>
-            <p class="text-xs text-gray-500 mb-4">這裏記錄了你在溫習中答錯過的題目與標準解析，溫故而知新！</p>
+            <p class="text-xs text-gray-500 mb-4">記錄了你在溫習中答錯過的題目與標準解析：</p>
             
             <div id="mistake-list-container" class="flex-1 overflow-y-auto space-y-3 pr-2 mb-6"></div>
 
@@ -312,15 +319,14 @@
         </div>
     </div>
 
-    <!-- JavaScript Application Logic & Database -->
+    <!-- Application Script -->
     <script>
-        // --- Application State ---
         let gameState = {
             playerName: "可樂餅",
             pet: "🐶",
             grade: 3,
-            category: "vocab", // 'vocab' or 'idiom'
-            mode: "choice",    // 'choice' or 'fill'
+            category: "vocab",
+            mode: "choice",
             questions: [],
             currentIndex: 0,
             score: 0,
@@ -328,128 +334,94 @@
             mistakes: []
         };
 
-        // --- Complete Curriculum Database ---
+        // Complete Curriculum Database including Word Document Questions for P.6
         const curriculumData = {
             3: {
                 vocab: [
-                    { word: "專心", definition: "專注於一事情，不分心。", sentences: ["上課時我們要_______地耹聽老師講解。", "弟弟做功課時十分_______，一下子就完成了。", "只要_______，再難的題目也能解決。", "媽媽稱讚我畫畫時態度_______。", "考試前夕，大家都在_______溫習。"] },
-                    { word: "熱鬧", definition: "景象繁盛活躍，充滿歡樂氣氛。", sentences: ["農曆新年時，年宵市場人山人海，十分_______。", "街上舞獅表演吸引了許多人圍觀，場面真_______。", "生日會上充滿了笑聲，氣氛十分_______。", "元宵節的燈會吸引了無數市民，十分_______。", "中秋節晚上，公園裏人聲鼎沸，熱鬧非凡。"] },
-                    { word: "整齊", definition: "有條理、不凌亂、有秩序。", sentences: ["放學後，值日生把課室打掃得乾乾_______。", "哥哥的書櫃收拾得井井有條，十分_______。", "升旗禮時，同學們排列得_______有序。", "做完實驗後，要把儀器擺放_______。", "軍人步操時步伐一致，衣着_______。"] },
-                    { word: "勇敢", definition: "不怕困難、危險，有氣魄。", sentences: ["消防員_______地衝進火場救人。", "小明在醫生面前表現得很_______，沒有哭鬧。", "面對挫折，我們要有_______的精神去克服。", "警察叔叔_______地捉拿壞人。", "這次攀爬活動需要_______的勇氣。"] },
-                    { word: "感謝", definition: "因得到別人的幫助或恩惠而心存感激。", sentences: ["我們要_______父母養育之恩。", "老師悉心教導，令我心存_______。", "多得你的幫助，我在此表示衷心的_______。", "收到大家的祝福，我感到十分_______。", "我們應當_______每一個默默付出的人。"] },
-                    { word: "欣賞", definition: "領略並享受美好的事物，或對人表示讚賞。", sentences: ["周末爸爸帶我去郊外_______大自然風景。", "老師_______我的繪畫作品充滿創意。", "音樂會上，觀眾陶醉地_______交響樂。", "我們學會互相_______對方的長處。", "站在山頂_______日落美景，令人心曠神怡。"] },
-                    { word: "豐富", definition: "種類多、數量大、充足。", sentences: ["圖書館裏藏書_______，滿足了我們的求知慾。", "媽媽為我們準備了_______的晚餐。", "這次旅行讓我獲得了_______的見聞。", "大自然為動物提供了_______的食物來源。", "展覽會展出了_______多樣的藝術品。"] },
-                    { word: "熱情", definition: "感情深厚、好客、熱誠溫和。", sentences: ["香港人待人_______，常常主動協助遊客。", "叔叔_______地招待遠道而來的客人。", "店員態度親切_______，令人留下好印象。", "義工們用_______的笑容迎接每一位長者。", "導遊向我們_______地介紹當地的歷史。"] },
-                    { word: "整潔", definition: "保持乾淨、清爽、有條理。", sentences: ["我們應該保持校服乾淨_______。", "整潔的家居環境有助身心健康。", "圖書角經同學整理後變得整齊_______。", "護士確保手術室保持高度_______。", "個人的儀容必須端莊_______。"] },
-                    { word: "安靜", definition: "沒有聲音、沉靜、不吵鬧。", sentences: ["圖書館內必須保持_______，以免影響別人。", "夜深了，四周變得一片_______。", "同學們在_______地閱讀課外書。", "大自然在清晨顯得格外寧靜_______。", "請大家保持_______，考試馬上開始。"] },
-                    { word: "認真", definition: "嚴肅不苟，做事不馬虎。", sentences: ["他對待工作十分_______，從不出錯。", "組長_______地耹聽大家的意見。", "態度_______是成功的基石。", "寫書法必須一筆一畫_______。", "老師讚賞小華學習態度_______。"] },
-                    { word: "努力", definition: "盡量使出力量，積極進取。", sentences: ["只要我們_______，定能達成夢想。", "運動員每日苦練，十分_______。", "弟弟為了考試溫習得很_______。", "成功屬於_______不懈的人。", "大家一起_______，合力完成壁報。"] },
-                    { word: "美麗", definition: "好看、漂亮、使人心情舒暢。", sentences: ["維多利亞港的夜景十分_______。", "公園裏盛開着_______的花朵。", "大自然展現出_______的姿態。", "蝴蝶擁有_______的花紋。", "這是一幅_______的山水畫。"] },
-                    { word: "快樂", definition: "感到幸福、舒暢、滿意。", sentences: ["祝你生日_______，心想事成。", "和小狗玩耍令我感到十分_______。", "助人为快乐之本，幫助別人最_______。", "童年時光充滿了_______的回憶。", "全家人聚在一起過節十分_______。"] },
-                    { word: "團結", definition: "聚結成一夥，和睦合作。", sentences: ["只要大家_______，就能克服困難。", "拔河比賽最講究隊員之間的_______。", "中華民族歷來重視力量的_______。", "班際球賽展現了班級的_______精神。", "_______就是力量。"] },
-                    { word: "誠實", definition: "言行跟思想一致，不說謊。", sentences: ["做人要_______，不可欺騙別人。", "小明拾金不昧，是一個_______的孩子。", "老師稱讚他知錯能改，十分_______。", "_______是建立信任的基礎。", "父母教導我們從小要_______守信。"] },
-                    { word: "守時", definition: "不遲到，遵守約定的時間。", sentences: ["我們約好八點集合，大家都要_______。", "火車準點出發，十分_______。", "守信用、_______是良好美德。", "遲到是不_______的表現。", "哥哥做事一向_______。"] },
-                    { word: "關心", definition: "把人或事放在心上，給予愛護。", sentences: ["感謝老師平日對我們的_______與照顧。", "同學們互相_______，情同手足。", "父母時刻_______子女的健康成長。", "我們要多_______社區裏的獨居長者。", "一句問候充滿了溫暖的_______。"] },
-                    { word: "幫助", definition: "給予物資或行動上的支援。", sentences: ["多謝你在危急時出手_______我。", "義工們定期探訪並_______有需要的人。", "互相_______是好朋友應有的態度。", "老師引導我們學會獨立與_______他人。", "警察叔叔熱心_______迷路的小童。"] },
-                    { word: "進步", definition: "向前發展，比原來更好。", sentences: ["經過努力溫習，我的中文成績進步了_______。", "只要每天吸收新知識，就會不斷_______。", "老師稱讚我在書法上有了很大_______。", "科技日新月異，社會迅速_______。", "學習態度改善了，成績自然_______。"] },
-                    { word: "聰明", definition: "天資高、智力強、反應快。", sentences: ["弟弟十分_______，一學就會。", "這個_______的孩子想出了好辦法。", "她頭腦靈活，是個_______的小女孩。", "_______的你一定能解開這個謎題。", "經過引導，大家發揮了_______才智。"] },
-                    { word: "清晨", definition: "太陽剛剛出來的早晨。", sentences: ["_______的公園裏有許多人在晨運。", "清晨空氣清新，令人心曠神怡。", "鳥兒在清晨的樹枝上歌唱。", "清晨露水滋潤着小草。", "他習慣在清晨跑步鍛煉身體。"] },
-                    { word: "黃昏", definition: "日落前後天色昏暗的時候。", sentences: ["漫步在海灘欣賞_______景色。", "黃昏時分，夕陽把天空染成金黃色。", "農夫在黃昏時收工回家。", "黃昏的晚霞美不勝收。", "夕陽西下，黃昏景色迷人。"] },
-                    { word: "溫暖", definition: "稍微溫熱，比喻關懷體貼。", sentences: ["羊毛衣穿在身上十分_______。", "社會各界送來了_______的愛心捐款。", "陽光照耀大地，令人感到_______。", "校園裏充滿了師生間的_______情誼。", "一杯熱茶驅走了冬日的寒冷。"] },
-                    { word: "寒冷", definition: "氣溫低，感覺冷。", sentences: ["冬天的北風吹來，感到十分_______。", "寒冷天氣下要加穿厚外套。", "候鳥飛往南方過冬以避開_______。", "雪山山頂終年冰雪覆蓋，氣候_______。", "寒冷深夜裏爐火帶來一絲暖意。"] },
-                    { word: "精彩", definition: "表演、節目等出色、美妙。", sentences: ["魔術表演十分_______，觀眾拍爛手掌。", "這場足球賽過程緊張且_______。", "文藝匯演的節目非常_______。", "馬戲團的演出贏得全場喝采。", "故事內容高潮迭起，十分_______。"] },
-                    { word: "熱烈", definition: "情緒高昂、興奮、活躍。", sentences: ["台下響起_______的掌聲。", "大家熱烈討論這個有趣的課題。", "慶祝活動氣氛_______。", "全場觀眾以_______歡迎嘉賓進場。", "討論會上發言十分_______。"] },
-                    { word: "仔細", definition: "周密、不粗心、細緻。", sentences: ["警察仔細檢查現場的蛛絲馬跡。", "做試卷時要仔細審題。", "媽媽仔細縫補破了的衣服。", "請仔細閱讀說明書後才使用。", "他做事一向謹慎仔細。"] },
-                    { word: "開心", definition: "心情愉快舒適。", sentences: ["今天收到生日禮物，我感到十分開心。", "和小朋友們一起玩遊戲真開心。", "全家人去旅行大家都好開心。", "祝大家每天都開開心心。", "笑口常開讓人更開心。"] },
-                    { word: "高興", definition: "愉快而興奮。", sentences: ["得知考試取得好成績，大家都很高興。", "爸爸答應帶我去主題樂園，我高興得跳起來。", "朋友來訪令主人家感到高興。", "喜訊傳來，舉國高興。", "老師表揚了我，心裏真高興。"] },
-                    { word: "激動", definition: "感情因受刺激而衝動、興奮。", sentences: ["運動員奪得金牌時情緒十分激動。", "聽到感人的故事，她激動得流下眼淚。", "全場觀眾為精彩的絕殺球激動歡呼。", "重逢的時刻大家都激動不已。", "心情激動得久久不能平靜。"] },
-                    { word: "感動", definition: "思想受外界影響而動心、思索、哀悅。", sentences: ["這個慈善故事深深感動了無數讀者。", "義工無私奉獻的精神令人感動。", "收到親手製作的卡片十分感動。", "淚水包含了感激與感動。", "真摯的友誼最能感動人心。"] },
-                    { word: "感激", definition: "感謝的心情。", sentences: ["心中充滿對恩師的感激之情。", "受人滴水之恩，當湧泉感激。", "他對伸出援手的陌生人表達感激。", "感激大家這段時間的陪伴與支援。", "無言感激盡在不言中。"] },
-                    { word: "讚賞", definition: "稱讚、嘉許。", sentences: ["校長讚賞義工同學的傑出表現。", "作品獲得評判一致讚賞。", "獲得老師的讚賞令人鼓舞。", "父母讚賞他懂事聽話。", "市民讚賞警員迅速破案。"] },
-                    { word: "誇獎", definition: "稱讚、美言。", sentences: ["長輩誇獎他謙虛有禮。", "不要因為一點誇獎而驕傲。", "老師誇獎班長工作負責。", "鄰居誇獎妹妹乖巧伶俐。", "獲得誇獎後要繼續努力。"] },
-                    { word: "鼓勵", definition: "激發勇氣，使人振作。", sentences: ["老師用溫柔的話語鼓勵挫敗的學生。", "父母的鼓勵是我前進的動力。", "互相鼓勵有助克服難關。", "教練鼓勵隊員不到最後決不放棄。", "掌聲是對表演者最好的鼓勵。"] },
-                    { word: "支持", definition: "給予協助與鼓勵。", sentences: ["感謝家人一直以來的支持與信任。", "全班同學支持代表參賽。", "環保活動需要市民大力支持。", "互相支持共同度過難關。", "政策出台獲得民眾支持。"] },
-                    { word: "協助", definition: "從旁幫忙、輔助。", sentences: ["警察在場協助維持秩序。", "秘書協助經理處理公務。", "感謝大家協助籌辦活動。", "義工協助派發物資。", "技術人員協助修復系統。"] },
-                    { word: "合作", definition: "共同工作、互相配合。", sentences: ["團隊合作是贏得比賽的關鍵。", "兩間公司合作開發新項目。", "小組成員互相合作完成壁報。", "愉快合作帶來高效成果。", "國際社會需要緊密合作。"] },
-                    { word: "和諧", definition: "和睦融洽、協調。", sentences: ["社區鄰里關係和諧共處。", "人與自然和諧共生。", "校園生活愉快且充滿和諧氣氛。", "家庭和諧是幸福的泉源。", "促進社會穩定與民族和諧。"] },
-                    { word: "和平", definition: "沒有戰爭、安寧的狀態。", sentences: ["世界和平是全人類的共同願望。", "愛好和平反對戰爭。", "祈求世界永遠充滿和平與愛。", "和平相處共謀發展。", "簽署和平協議。"] },
-                    { word: "探索", definition: "多方尋求答案。", sentences: ["我們要勇於探索科學奧祕。", "太空人探索浩瀚宇宙。", "探索大自然的奇妙規律。"] },
-                    { word: "堅定", definition: "立場堅強不移。", sentences: ["我們要堅定理想信念。", "他以堅定的步伐向前邁進。", "面對困難態度十分堅定。"] },
-                    { word: "勤勞", definition: "努力工作，不怕辛苦。", sentences: ["農夫每日辛勤耕作十分勤勞。", "勤勞的人民創造美好生活。", "我們要養成勤勞的美德。"] },
-                    { word: "謙虛", definition: "不自滿，虛心接受意見。", sentences: ["取得好成績也要保持謙虛。", "他待人謙虛有禮，受人尊敬。", "謙虛使人進步，驕傲使人落後。"] },
-                    { word: "機智", definition: "反應敏捷，謀略出眾。", sentences: ["小英雄機智地擺脫了壞人。", "面對突發狀況展現了機智。", "他頭腦靈活，十分機智。"] },
-                    { word: "冷靜", definition: "不慌亂，鎮定沉着。", sentences: ["發生火警時要保持冷靜。", "她冷靜地分析問題並解決。", "冷靜思考有助做出正確判斷。"] },
-                    { word: "熱烈", definition: "情緒高漲活躍。", sentences: ["台下響起熱烈的掌聲。", "大家熱烈討論新方案。", "慶祝晚會氣氛熱烈。"] },
-                    { word: "仔細", definition: "周密不馬虎。", sentences: ["請仔細檢查試卷答案。", "媽媽仔細叮囑出門注意事項。", "他做事向來認真仔細。"] },
-                    { word: "認真", definition: "嚴肅不苟不馬虎。", sentences: ["學習態度必須認真。", "運動員認真進行日常訓練。", "她認真完成每一項功課。"] }
+                    { word: "專心", definition: "專注於一事情，不分心。", sentences: ["上課時我們要_______地耹聽老師講解。", "弟弟做功課時十分_______，一下子就完成了。", "只要_______，再難的題目也能解決。"] },
+                    { word: "熱鬧", definition: "景象繁盛活躍，充滿歡樂氣氛。", sentences: ["農曆新年時，年宵市場人山人海，十分_______。", "街上舞獅表演吸引了許多人圍觀，場面真_______。", "生日會上充滿了笑聲，氣氛十分_______。"] },
+                    { word: "整齊", definition: "有條理、不凌亂、有秩序。", sentences: ["放學後，值日生把課室打掃得乾乾_______。", "哥哥的書櫃收拾得井井有條，十分_______。"] },
+                    { word: "勇敢", definition: "不怕困難、危險，有氣魄。", sentences: ["消防員_______地衝進火場救人。", "小明在醫生面前表現得很_______，沒有哭鬧。"] },
+                    { word: "感謝", definition: "因得到別人的幫助或恩惠而心存感激。", sentences: ["我們要_______父母養育之恩。", "多得你的幫助，我在此表示衷心的_______。"] },
+                    { word: "欣賞", definition: "領略並享受美好的事物，或對人表示讚賞。", sentences: ["周末爸爸帶我去郊外_______大自然風景。", "老師_______我的繪畫作品充滿創意。"] },
+                    { word: "豐富", definition: "種類多、數量大、充足。", sentences: ["圖書館裏藏書_______，滿足了我們的求知慾。", "媽媽為我們準備了_______的晚餐。"] },
+                    { word: "熱情", definition: "感情深厚、好客、熱誠溫和。", sentences: ["香港人待人_______，常常主動協助遊客。", "叔叔_______地招待遠道而來的客人。"] },
+                    { word: "安靜", definition: "沒有聲音、沉靜、不吵鬧。", sentences: ["圖書館內必須保持_______，以免影響別人。", "夜深了，四周變得一片_______。"] },
+                    { word: "認真", definition: "嚴肅不苟，做事不馬虎。", sentences: ["他對待工作十分_______，從不出錯。", "組長_______地耹聽大家的意見。"] }
                 ],
                 idiom: [
-                    { word: "一心一意", definition: "形容心思專一，沒有二心。", sentences: ["哥哥_______地溫習，準備明天的呈分試。", "我們做任何事都要_______，不能三心兩意。", "運動員_______地訓練，希望爭取佳績。", "媽媽_______照顧生病的弟弟。", "只有_______，才能把手頭的工作做好。"] },
-                    { word: "人山人海", definition: "形容聚集的人非常多，熱鬧非凡。", sentences: ["維園花市擠得_______，熱鬧極了。", "假日的主題樂園排隊處_______。", "演唱會門票開售，售票處外_______。", "球賽現場座無虛席，_______。", "中秋晚會的廣場上_______。"] },
-                    { word: "三心兩意", definition: "意志不堅定，猶豫不決。", sentences: ["做事不能_______，否則一事無成。", "選購文具時不要_______，看準了就買。", "他在升學抉擇時_______，不知如何是好。", "學習最忌諱_______，要有始有終。", "弟弟做功課時_______，結果拖了很久。"] },
-                    { word: "十全十美", definition: "完美無缺，各方面都非常圓滿。", sentences: ["世事往往難以_______，我們要學會包容。", "這幅畫雖然有些小瑕疵，但已相當_______。", "世界上沒有_______的人，每人都有缺點。", "演出非常成功，幾乎可說是_______。", "精益求精不等於追求_______。"] },
-                    { word: "手忙腳亂", definition: "形容做事慌亂，沒有條理。", sentences: ["突然停電時，大家在一片漆黑中_______。", "媽媽同時處理家務時弄得_______。", "臨急抱佛腳溫習，令他在試場內_______。", "上學快遲到時，我急得_______。", "熟練之後，操作機器便不會_______。"] },
-                    { word: "不屈不撓", definition: "在困難和壓力面前不屈服、不低頭。", sentences: ["英雄人物在逆境中_______，值得學習。", "中華民族面對挑戰展現了_______的精神。", "運動員在落後時依然_______地追趕。", "面對失敗要有_______的毅力。", "科學家面對挫折表現得_______。"] },
-                    { word: "同心協力", definition: "團結一致，共同努力。", sentences: ["全班同學_______，贏得壁報比賽冠軍。", "抗擊疫情需要社會各界_______。", "拔河比賽中大家_______，奮力一拉。", "只要大家_______，就沒有克服不了的難關。", "救災工作在各方_______下順利展開。"] },
-                    { word: "水滴石穿", definition: "比喻只要堅持不懈，微小力量也能成大事。", sentences: ["學習外語正如_______，貴乎持之以恆。", "只要有_______的毅力，世上無難事。", "鐵杵成針的道理告訴我們_______的珍貴。", "憑着_______的精神，他終於攻克了博士學位。", "成功往往來自_______的日積月累。"] },
-                    { word: "循序漸進", definition: "按一定的順序、步驟逐漸進步。", sentences: ["學習知識必須_______，不能好高騖遠。", "老師指導我們做實驗時要_______地進行。", "這本教材編排科學，深淺_______。", "練琴也要_______，每天進步一點點。", "體能訓練必須_______，以免受傷。"] },
-                    { word: "實事求是", definition: "從實際出發，講求科學態度與客觀真相。", sentences: ["做學問必須秉持_______的態度。", "調查報告必須客觀中立、_______。", "他處事作風一向_______，深得上司信賴。", "科學實驗需要_______的精確精神。", "面對問題我們要_______地去分析解決。"] },
-                    { word: "全神貫注", definition: "全副精神集中在一起。", sentences: ["同學們_______地耹聽老師講解科學原理。", "他_______地組裝機械模型。", "考試時必須_______，以免粗心失分。", "畫家_______地創作巨幅油畫。", "雕刻師傅_______地雕琢木器。"] },
-                    { word: "刻苦耐勞", definition: "生活勤奮，經受得起艱苦。", sentences: ["老一輩香港人_______，建立美好家園。", "農夫日出而作，生活_______。", "他有_______的精神，從不抱怨工作辛苦。", "學徒期間雖然辛苦，但他_______。", "體育訓練十分艱辛，運動員_______。"] },
-                    { word: "自相矛盾", definition: "比喻言行前後不一致，互相抵觸。", sentences: ["你的說話前後_______，令人難以信服。", "這種說法_______，根本站不住腳。", "辯論時切忌露出_______的漏洞。", "他的一番言論充滿了_______。", "行為與口號_______，遭到質疑。"] },
-                    { word: "百折不撓", definition: "意志堅強，經歷無數挫折決不屈服。", sentences: ["發明家憑着_______的精神終於成功研發。", "探索宇宙的道路上需要_______的毅力。", "革命先烈_______，為理想奮鬥到底。", "面對重重難關，我們要有_______的信念。", "運動員憑着_______的鬥志反敗為勝。"] },
-                    { word: "意味深長", definition: "含意深遠，耐人尋味。", sentences: ["老師這番話_______，令我獲益良多。", "小說的結局_______，令人回味無窮。", "這幅寓言畫作寓意_______。", "校長在畢業典禮上發表了_______的演講。", "爺爺的微笑包含了_______的寄望。"] }
+                    { word: "一心一意", definition: "形容心思專一，沒有二心。", sentences: ["哥哥_______地溫習，準備明天的呈分試。", "我們做任何事都要_______，不能三心兩意。"] },
+                    { word: "人山人海", definition: "形容聚集的人非常多，熱鬧非凡。", sentences: ["維園花市擠得_______，熱鬧極了。", "假日的主題樂園排隊處_______。"] },
+                    { word: "三心兩意", definition: "意志不堅定，猶豫不決。", sentences: ["做事不能_______，否則一事無成。", "選購文具時不要_______，看準了就買。"] },
+                    { word: "十全十美", definition: "完美無缺，各方面都非常圓滿。", sentences: ["世事往往難以_______，我們要學會包容。", "世界上沒有_______的人，每人都有缺點。"] },
+                    { word: "手忙腳亂", definition: "形容做事慌亂，沒有條理。", sentences: ["突然停電時，大家在一片漆黑中_______。", "上學快遲到時，我急得_______。"] }
                 ]
             },
             6: {
                 vocab: [
-                    { word: "堅持", definition: "意志堅強，不輕易放棄。", sentences: ["只要我們_______不懈，終會達成目標。", "馬拉松運動員憑着頑強毅力_______到終點。", "學習外語需要長期_______的累積。", "面對重重困難，我們必須_______到底。", "科研人員多年來_______不懈地進行實驗。"] },
-                    { word: "繁華", definition: "城鎮集市工商業興旺、熱鬧景象。", sentences: ["香港是一個國際化且_______的大都市。", "入夜後，尖沙咀街頭燈光璀璨，十分_______。", "昔日的小漁村如今已發展成_______的商業中心。", "繁華鬧市中也有一片寧靜的公園。", "遊客們被這座城市的_______景象深深吸引。"] },
-                    { word: "嚴格", definition: "要求嚴厲、合乎規矩、不放鬆。", sentences: ["王老師對我們的功課要求十分_______。", "教練對體操運動員的訓練非常_______。", "學校制定了_______的校規來維護秩序。", "爸爸管教孩子雖然_______但充滿關愛。", "食品安全檢驗的標準一向十分_______。"] },
-                    { word: "欣賞", definition: "享受並領略其中的美妙，或給予高度評價。", sentences: ["我們坐在草地上_______滿天繁星。", "藝術評論家_______這幅畫作的獨特風格。", "互相_______是建立良好人際關係的基石。", "夕陽西下，遊人駐足_______這片海景。", "老師鼓勵同學多閱讀並學會_______文學之美。"] },
-                    { word: "慷慨", definition: "性格豪爽，大方，不吝嗇錢財或幫助。", sentences: ["這位善長仁翁_______捐款支持災區重建。", "朋友有困難時，他總是伸出援手，十分_______。", "大自然_______地向人類餽贈了寶貴資源。", "哥哥把心愛的藏書_______地借給同學。", "他的_______行為贏得了眾人的尊敬。"] },
-                    { word: "探索", definition: "多方尋求答案、研究未知事物。", sentences: ["人類不斷_______宇宙的奧祕。", "科學家深入深海_______未知的生物。", "考古學家在古墓中_______歷史真相。", "好奇心驅使我去_______大自然。", "教育旨在啟發學生自主_______知識。"] },
-                    { word: "謀略", definition: "計謀與策略。", sentences: ["這場棋局考驗雙方的_______與智慧。", "歷史人物足智多謀，擁有出色的_______。", "商場如戰場，企業發展需要長遠_______。", "他憑着卓越的_______化解了危機。", "將領運籌帷幄，展現精湛_______。"] },
-                    { word: "沉着", definition: "面對危急情況鎮定不慌亂。", sentences: ["面對突發火警，她依然保持_______。", "消防隊長_______地指揮救援行動。", "棋手在落後時表現得十分_______。", "遇到危機切忌慌張，必須冷靜_______。", "他處變不驚，神態_______。"] },
-                    { word: "敏捷", definition: "動作或思維靈敏迅速。", sentences: ["這隻小貓身手_______，一下子爬上樹。", "辯論員思維_______，迅速反駁對方。", "守門員反應_______，撲出險球。", "武術運動員動作流暢且_______。", "獵豹奔跑速度極快且身形_______。"] },
-                    { word: "開導", definition: "開導疏導，使其想通。", sentences: ["老師耐心地_______情緒低落的學生。", "朋友的一番話_______了我的心結。", "父母用溫和的方式_______孩子。", "經過心理學家的_______，他重拾信心。", "學會自我調節與互相_______。"] },
-                    { word: "振奮", definition: "使精神抖洠，情緒高昂。", sentences: ["這場勝利極大地_______了全隊的士氣。", "激昂的樂曲令人精神_______。", "聽到好消息後大家為之_______。", "教練的講話_______人心。", "清晨的咖啡讓人元氣_______。"] },
-                    { word: "繁重", definition: "工作或任務繁多沉重。", sentences: ["面對_______的呈分試複習，我們要作好時間管理。", "醫護人員肩負_______的救治任務。", "爸爸每天工作_______，十分辛苦。", "減輕學生的功課負擔與_______課業。", "科研工作任務_______。"] },
-                    { word: "廣闊", definition: "面積廣大，空間寬敞。", sentences: ["飛鳥翱翔在_______的天空。", "農場擁有_______的草原。", "知識的海洋浩瀚而_______。", "站在峰頂俯瞰_______大地。", "青年人有_______的發展空間。"] },
-                    { word: "浩瀚", definition: "水勢盛大，或形容數量極多、廣大。", sentences: ["漫步在_______的沙漠中倍感渺小。", "圖書館藏書_______，如海一般深廣。", "宇宙星空_______無垠。", "歷史長河_______奔騰。", "浩瀚的太平洋波瀾壯闊。"] },
-                    { word: "深奧", definition: "道理高深，不易理解。", sentences: ["這本哲學書的內容十分_______。", "老師深入淺出地講解_______的科學原理。", "古文之中往往蘊含_______的哲理。", "面對_______的難題，大家共同探討。", "理論看似_______，實則源於生活。"] },
-                    { word: "精湛", definition: "技藝高超，學問精深。", sentences: ["工匠的雕刻手藝十分_______。", "鋼琴家的演奏技巧_______，贏得喝采。", "醫生憑着_______的醫術治癒病人。", "這部電影的特效製作相當_______。", "廚師烹調出_______美味的佳餚。"] },
-                    { word: "卓越", definition: "傑出，超出一般。", sentences: ["他在科學研究領域取得了_______的成就。", "公司表揚了幾位表現_______的員工。", "這座城市擁有_______的交通網絡。", "學校培養出無數_______的人才。", "她的領導才能備受各界讚賞。"] },
-                    { word: "崇高", definition: "精神、品格等高尚博大，令人敬仰。", sentences: ["消防員捨己救人的_______情操令人敬佩。", "教育事業是一項偉大而_______的工作。", "革命先烈懷抱_______的愛國理想。", "我們向默默奉獻的志願者致以_______敬意。", "追求真理是人類_______的目標。"] },
-                    { word: "偉大", definition: "才華出眾、事業宏偉或品格崇高。", sentences: ["母愛是世上最_______的力量。", "科學家為人類文明作出了_______貢獻。", "長城是古代勞動人民創造的_______奇蹟。", "這是一個_______的歷史時刻。", "歷史上許多_______人物影響深遠。"] },
-                    { word: "壯麗", definition: "壯觀美麗。", sentences: ["日出時分的黃山雲海景色無比_______。", "祖國的山河壯麗_______。", "交響樂章氣勢磅礴且_______。", "宏偉的宮殿建築群顯得十分_______。", "晚霞映照下的海面波光粼粼，十分_______。"] },
-                    { word: "宏偉", definition: "規模宏大雄偉。", sentences: ["三峽大壩工程規模_______。", "這座宏偉的教堂歷史悠久。", "故宮建築群氣勢_______。", "城市規劃藍圖宏偉遠大。", "宏偉的立交橋四通八達。"] },
-                    { word: "奇妙", definition: "神妙莫測，令人驚嘆。", sentences: ["大自然充滿了各種_______的生物。", "這本書帶領讀者進入_______的童話世界。", "科學實驗的變化過程十分_______。", "雙胞胎之間有種_______的心靈感應。", "魔術表演展現了_______的幻覺。"] },
-                    { word: "神祕", definition: "神祕莫測，不為人知。", sentences: ["深海世界依然充滿了_______的色彩。", "古老的金字塔隱藏着無數_______。", "神祕的宇宙吸引無數天文學家探索。", "森林深處有一間_______的小木屋。", "這封信的寄件人身份十分_______。"] },
-                    { word: "幽靜", definition: "幽雅安靜。", sentences: ["山間小路幽靜而清涼。", "圖書館角落環境幽靜適合溫習。", "這座古老庭院古樸而幽靜。", "清晨的校園顯得格外幽靜。", "尋找一處幽靜的地方放鬆身心。"] },
-                    { word: "喧鬧", definition: "聲音大而雜亂，吵鬧。", sentences: ["繁華市中心車水馬龍，十分喧鬧。", "節日的夜市人聲鼎沸，好不喧鬧。", "課室裏突然喧鬧起來。", "遠離城市的喧鬧享受鄉村寧靜。", "喧鬧的街頭漸漸歸於平靜。"] },
-                    { word: "荒涼", definition: "人跡稀少，地勢荒蕪冷清。", sentences: ["戈壁沙漠一片荒涼。", "荒涼的山谷在夜色中更顯孤寂。", "荒涼的土地經開墾後變成良田。", "遠古遗址顯得十分荒涼。", "荒涼的荒島上偶有海鳥飛過。"] },
-                    { word: "繁榮", definition: "興旺發達，昌盛。", sentences: ["祝願國家繁榮昌盛，國泰民安。", "經濟繁榮帶動了商業發展。", "文化交流促進了社會繁榮。", "這裏是商貿繁榮的港口。", "海峽兩岸經濟共同繁榮。"] },
-                    { word: "衰退", definition: "由強盛轉向微弱，倒退。", sentences: ["由於經營不善，業務逐漸衰退。", "年紀漸長，記憶力難免有些衰退。", "經濟週期波動導致部分行業衰退。", "採取措施防止生態環境衰退。", "肌肉力量在缺乏運動時會衰退。"] },
-                    { word: "興旺", definition: "蓬勃發展，繁榮昌盛。", sentences: ["這條商業街生意興旺，客源不斷。", "家族人丁興旺，代代人才輩出。", "祝新店開業大吉，業務興旺。", "文化事業蒸蒸日上，十分興旺。", "村落因旅遊業發展而興旺。"] },
-                    { word: "寬容", definition: "氣量大，原諒或不計較他人過失。", sentences: ["我們要以寬容的心態對待別人的無心之失。", "老師寬容地原諒了犯錯的同學。", "社會需要更多的包容與寬容。", "寬容大度是美德。", "以寬容化解矛盾。"] },
-                    { word: "嚴厲", definition: "嚴格不寬容。", sentences: ["法官對違法行為作出嚴厲懲處。", "爸爸用嚴厲的語氣訓斥了說謊的弟弟。", "學校對欺凌行為採取嚴厲措施。", "嚴厲的批評使他意識到錯誤。", "教練給予違紀球員嚴厲處分。"] },
-                    { word: "慈祥", definition: "（老年人的態度）溫和安詳。", sentences: ["慈祥的奶奶臉上總是帶着溫暖的笑容。", "老校長目光慈祥地看着畢業生。", "慈祥的眼神給予孫兒無限關愛。", "慈祥的爺爺經常講述過去的故事。", "社區裏的老人慈祥而友善。"] },
-                    { word: "嚴肅", definition: "神情、氣氛莊重認真不輕鬆。", sentences: ["警察叔叔神情嚴肅地調查案件。", "開會時氣氛嚴肅。", "爸爸對待紀律問題態度十分嚴肅。", "嚴肅的表情令人不敢馬虎。", "校規面前必須嚴肅對待。"] },
-                    { word: "和藹", definition: "態度溫和，容易接近。", sentences: ["王醫生待人十分和藹，深受病人喜愛。", "慈祥和藹的伯伯送我糖果。", "老師語調和藹可親。", "和藹的笑容拉近了人與人之間的距離。", "圖書館員態度和藹可親。"] },
-                    { word: "和氣", definition: "態度平心靜氣，不爭執。", sentences: ["做生意以和氣生財最重要。", "鄰里之間要和氣相處。", "雖然意見不同，但大家依然和氣討論。", "和氣待人贏得好人緣。", "保持和氣避免傷和氣。"] },
-                    { word: "粗暴", definition: "脾氣暴躁，行事不講道理。", sentences: ["處理問題不能態度粗暴。", "粗暴的行為無法解決糾紛。", "切忌用粗暴言語傷害他人。", "他一時衝動表現得十分粗暴。", "文明溝通反對粗暴。"] },
-                    { word: "粗心", definition: "不細心，馬虎大意。", sentences: ["考試時因為粗心寫錯了單位。", "做事粗心大意容易出錯。", "提醒自己細心檢查，不要再粗心。", "粗心是導致失敗的主要原因。", "粗心大意使他失分不少。"] },
-                    { word: "細心", definition: "用心周密，不馬虎。", sentences: ["護士細心地為病人量血溫。", "細心觀察生活中的科學細節。", "做實驗時步驟要十分細心。", "感謝媽媽細心的照顧。", "細心審題是拿高分的秘訣。"] },
-                    { word: "謹慎", definition: "對言行審慎小心，免生禍患。", sentences: ["過馬路時要格外謹慎周圍交通。", "投資理財必須謹慎行事。", "他在處理機密文件時十分謹慎。", "謹慎駕駛確保道路安全。", "謹慎言行避免誤會。"] },
-                    { word: "魯莽", definition: "言語行動輕率，不加思考。", sentences: ["遇事切忌衝動魯莽。", "魯莽的決定往往帶來嚴重後果。", "他因一時魯莽而闖下了大禍。", "做事不能魯莽，要深謀遠慮。", "批評他做事太過魯莽。"] },
-                    { word: "果斷", definition: "決斷不猶豫。", sentences: ["隊長在危急關頭果斷下達指令。", "老闆作風果斷，迅速抓住商機。", "消防員果斷破門救人。", "果斷的抉擇避免了更大損失。", "遇到緊急情況必須果斷處理。"] },
-                    { word: "猶豫", definition: "拿不定主意，遲疑不決。", sentences: ["她在選購禮物時猶豫不決。", "面對機遇不要猶豫，要勇敢把握。", "他猶豫了一下還是答應了請求。", "做事果斷切忌過分猶豫。", "猶豫不決往往錯失良機。"] },
-                    { word: "果決", definition: "決斷堅決不拖延。", sentences: ["領導層果決地批準了改革方案。", "他做事果決，從不拖泥帶水。", "果決的態度贏得下屬信任。", "面對危機要有果決的勇氣。", "果決行動解決了難題。"] },
-                    { word: "堅決", definition: "態度堅定，毫不動搖。", sentences: ["我們堅決反對任何形式的校園欺凌。", "哥哥堅決要參軍保衛國家。", "老師堅決制止了不當行為。", "堅決完成上級交代的任務。", "意志堅決克服一切難關。"] },
-                    { word: "動搖", definition: "意志不堅定，發生變化。", sentences: ["面對誘惑，他的意志開始動搖。", "堅定的信念絕不輕易動搖。", "謠言動搖了大家的信心。", "形勢變化沒有動搖我們的決心。", "切勿輕易動搖原則。"] },
-                    { word: "執着", definition: "對某事堅持不放，近乎固執。", sentences: ["他對科學真理有着執着的追求。", "藝術家對創作有着執着的熱愛。", "有時候適當堅持，有時候不要太執着。", "執着的信念支撐他走到今天。", "執着於夢想終會發光。"] },
-                    { word: "頑強", definition: "強硬不屈，堅韌不拔。", sentences: ["守門員頑強地撲出對方的多次射門。", "抗洪戰士展現了頑強的鬥志。", "病人憑着頑強的毅力戰勝病魔。", "頑強的生命力令人敬佩。", "在逆境中保持頑強精神。"] }
+                    { word: "競爭", definition: "互相爭勝，角逐優勝或目標。", sentences: [
+                        "在現今這個充滿挑戰的社會裏，各行各業的_______十分劇烈，我們唯有不斷充實自己，才不會被時代淘汰。",
+                        "運動場上的運動員們個個精神抖擻，為了爭奪金牌而展開了激烈的_______，場面十分緊張。",
+                        "這間著名中學的學額有限，每年都吸引了無數優秀的小學畢業生前來報讀，入學_______可謂異常白熱化。",
+                        "商業市場上的_______往往殘酷無情，企業若不時刻創新求變，便極有可能在短時間內被對手超越並吞併。",
+                        "適當的_______能夠激發個人的潛能與鬥志，但如果過度焦慮，反而會對身心健康造成不良的影響。"
+                    ]},
+                    { word: "風塵僕僕", definition: "形容旅途勞累困頓的樣子。", sentences: [
+                        "爸爸結束了為期一個月的海外商務考察後，終於回到了家中，望着他_______的身影，我和媽媽都感到十分心疼。",
+                        "爺爺嫲嫲從偏遠的鄉下山區坐了幾天幾夜的火車趕來探望我們，看着他們_______的樣子，我們趕緊奉上一杯熱茶。",
+                        "考古學家們_______地深入人跡罕至的沙漠進行考察，歷經重重艱險，終於發現了失落多年的古代文明遺址。",
+                        "為了趕在限期前將第一手災情報道傳回總社，幾位新聞記者不辭勞苦、_______地趕赴災區現場。",
+                        "經過了長途跋涉、_______的旅程，這支探險隊終於抵達了南極的考察站，每個人臉上都帶着疲憊但興奮的神情。"
+                    ]},
+                    { word: "風雨無阻", definition: "不受風雨阻擋，形容風雨天依然照常進行或堅持到底。", sentences: [
+                        "為了確保學校的陸運會能夠順利舉行，體育老師們不論天氣如何，_______地在運動場上進行各項場地佈置工作。",
+                        "這位退休的老校長數十年如一日，_______地每天清晨六點準時到校門口迎接每一位回校上課的學生。",
+                        "即使今天下着傾盆大雨，天文台也發出了黃色暴雨警告，但這項社區長者探訪活動依然_______地按計劃進行。",
+                        "郵差叔叔無論面對嚴寒酷暑還是刮風下雨，總是_______地將每一封信件準時送到市民的手中。",
+                        "為了在大賽前保持最佳的狀態，這名馬拉松選手堅持_______的訓練原則，每天清晨五點必定到跑道上報到。"
+                    ]},
+                    { word: "五花八門", definition: "比喻花樣繁多，變幻莫測。", sentences: [
+                        "書展裏的書籍種類_______，從深奧的科學理論到輕鬆的兒童繪本應有盡有，令參觀的市民目不暇給。",
+                        "媽媽在廚房裏忙活了一個下午，晚餐的桌上擺滿了_______的美味佳餚，香氣撲鼻，讓人食指大動。",
+                        "電子遊戲市場上的產品_______，家長在為孩子挑選時必須格外謹慎，以免他們沉迷於不良資訊。",
+                        "這間大型商場的玩具部售賣着_______的益智玩具，吸引了許多小朋友和家長駐足選購。",
+                        "為了慶祝學校五十周年校慶，同學們發揮無限創意，設計了_______的攤位遊戲和文藝表演。"
+                    ]},
+                    { word: "一言難盡", definition: "話很多，簡短的一句話說不清楚。", sentences: [
+                        "提起上星期那場狀況百出的畢業旅行，真叫人_______，從出門遇上大塞車到景點臨時關閉，實在倒霉透頂。",
+                        "老師問起小明這次期末考試成績大幅退步的原因，小明支支吾吾半天，嘆了一口氣說：「這件事實在_______……」",
+                        "當記者追問這位曾經叱咤一時的商界巨子為何會落得破產收場時，他無奈地搖了搖頭，感嘆道箇中辛酸實在_______。",
+                        "看着老朋友歷經滄桑的面容，聽着他訴說這些年來離鄉別井的遭遇，我們都覺得這段經歷_______，內心百感交集。",
+                        "這道複雜的數學難題包含了多個陷阱，解題的過程迂迴曲折，箇中的邏輯關係_______，幾句話很難向你解釋清楚。"
+                    ]},
+                    { word: "本末倒置", definition: "比喻顛倒主次事物的位置。", sentences: [
+                        "如果我們為了爭取優異的考試分數而放棄了正常的作息與身心健康，那就無異於_______，得不償失。",
+                        "閱讀課外書的目的在於豐富知識與培養情操，如果只為了應付功課而隨便翻翻，未免有些_______。",
+                        "公司管理層在面對嚴重的財政危機時，不率先檢討營運方針，反而把資金花在毫無意義的奢華辦公室裝修上，簡直是_______。",
+                        "許多人在日常生活中經常將娛樂消遣放在首位，而將最重要的學業或工作拋在腦後，這種_______的做法實在令人擔憂。",
+                        "教育的本質應當是啟發學生的思考與品德培養，若是一味追求名校升學率而忽略了全人發展，便是犯了_______的錯誤。"
+                    ]},
+                    { word: "日以繼夜", definition: "日夜不停，形容連夜工作或學習勤奮。", sentences: [
+                        "為了在限期前完成這項大型科學專題研習，我們全組同學_______地搜集資料與進行實驗，最終取得了優異的成績。",
+                        "消防員和救援人員在災難發生後_______地在瓦礫堆中搜索失蹤者，展現出無私奉獻的專業精神。",
+                        "為了應付即將到來的呈分試，哥哥這陣子總是_______地溫習各科課本，常常溫習到深夜三點才肯休息。",
+                        "工程團隊為了趕在颱風季節來臨前完成水利防洪工程的修繕，_______地趕工，不敢有一絲一毫的鬆懈。"
+                    ]},
+                    { word: "堅持", definition: "意志堅強，不輕易放棄。", sentences: ["只要我們_______不懈，終會達成目標。", "馬拉松運動員憑着頑強毅力_______到終點。"] },
+                    { word: "繁華", definition: "城鎮集市工商業興旺、熱鬧景象。", sentences: ["香港是一個國際化且_______的大都市。", "入夜後，尖沙咀街頭燈光璀璨，十分_______。"] },
+                    { word: "嚴格", definition: "要求嚴厲、合乎規矩、不放鬆。", sentences: ["王老師對我們的功課要求十分_______。", "教練對體操運動員的訓練非常_______。"] }
+                ],
+                idiom: [
+                    { word: "鍥而不捨", definition: "比喻有恆心、有毅力，堅持不懈地努力。", sentences: ["憑着_______的精神，科學家終於攻克了這個醫學難題。", "學習知識需要_______，才能取得優異的成績。"] },
+                    { word: "未雨綢繆", definition: "比喻事先做好準備，防患於未然。", sentences: ["風季將至，我們應該_______，做好防風措施。", "平時多積蓄資金是_______的明智做法。"] },
+                    { word: "居安思危", definition: "處在平定的環境裏，要想到可能發生的危險。", sentences: ["國家雖然繁榮昌盛，但我們仍需_______，加強國防。", "企業管理者必須保持_______的意識，時刻革新技術。"] },
+                    { word: "溫故知新", definition: "溫習舊有的知識，從中獲得新的理解和體會。", sentences: ["每天晚上把當天學過的課文複習一遍，自然能_______。", "讀書時若能深刻反思，往往可以達到_______的效果。"] },
+                    { word: "精益求精", definition: "好了還求更好。", sentences: ["工匠對每一個細節都_______，創造出完美的藝術品。", "我們在學業上要樹立_______的精神，不可自滿。"] },
+                    { word: "集思廣益", definition: "集中大眾的智慧，吸取有益的意見。", sentences: ["籌備校慶活動時，大家_______，想出了很多妙計。", "開會的目的就是讓大家發言，以便_______。"] },
+                    { word: "臨渴掘井", definition: "比喻事前沒有準備，臨到事態緊急時才想辦法。", sentences: ["平時不努力溫習，臨考試才抱佛腳，豈不是_______？", "防災防災重在平時準備，切忌_______。"] },
+                    { word: "賞心悅目", definition: "看到美好的景象而心情舒暢愉快。", sentences: ["花園裏盛開的花朵形態各異，令人_______。", "欣賞優美的古典舞蹈，真是一件_______的樂事。"] },
+                    { word: "舉一反三", definition: "從一件事情類推而理解更多同類事物。", sentences: ["數學學習最重要的是理解原理，做到_______。", "聰明的學生往往能從老師的講解中_______。"] },
+                    { word: "胸有成竹", definition: "比喻做事之前心中已有成熟的計劃或把握。", sentences: ["對於這次呈分試，他早已複習周全，_______。", "隊長在賽前簡報時神情自信，顯然_______。"] }
                 ]
             }
         };
@@ -461,7 +433,6 @@
             "🐻": ["熊掌拍拍，加油！", "熊熊為你打氣！", "穩紮穩打一定行！"]
         };
 
-        // --- Initialization & Event Listeners ---
         window.addEventListener('DOMContentLoaded', () => {
             loadUserData();
             loadMistakes();
@@ -475,8 +446,13 @@
             if (getEl('btn-p3')) getEl('btn-p3').onclick = () => startGameSetup(3);
             if (getEl('btn-p6')) getEl('btn-p6').onclick = () => startGameSetup(6);
 
+            if (getEl('header-btn-p3')) getEl('header-btn-p3').onclick = () => switchGrade(3);
+            if (getEl('header-btn-p6')) getEl('header-btn-p6').onclick = () => switchGrade(6);
+
             if (getEl('btn-mistakes')) getEl('btn-mistakes').onclick = openMistakeModal;
-            if (getEl('btn-home')) getEl('btn-home').onclick = returnToHome;
+            if (getEl('btn-home')) getEl('btn-home').onclick = showWelcomeModal;
+            
+            if (getEl('btn-quiz-exit-home')) getEl('btn-quiz-exit-home').onclick = returnToHome;
             if (getEl('btn-stage-home')) getEl('btn-stage-home').onclick = returnToHome;
             if (getEl('btn-gameover-home')) getEl('btn-gameover-home').onclick = returnToHome;
 
@@ -502,15 +478,22 @@
             }
         }
 
+        function switchGrade(grade) {
+            gameState.grade = grade;
+            updatePetDisplay();
+        }
+
+        function showWelcomeModal() {
+            document.getElementById('welcome-modal').classList.remove('hidden');
+        }
+
         function startGameSetup(grade) {
             const nameInput = document.getElementById('player-name-input').value.trim();
-            if (nameInput) {
-                gameState.playerName = nameInput;
-            }
+            if (nameInput) gameState.playerName = nameInput;
+            
             const selectedPet = document.querySelector('input[name="pet"]:checked');
-            if (selectedPet) {
-                gameState.pet = selectedPet.value;
-            }
+            if (selectedPet) gameState.pet = selectedPet.value;
+            
             gameState.grade = grade;
 
             localStorage.setItem('adv_player_name', gameState.playerName);
@@ -530,6 +513,23 @@
             document.getElementById('quiz-pet-icon').innerText = gameState.pet;
             document.getElementById('stage-break-pet-icon').innerText = gameState.pet;
             
+            const btnP3 = document.getElementById('header-btn-p3');
+            const btnP6 = document.getElementById('header-btn-p6');
+            if (btnP3 && btnP6) {
+                if (gameState.grade === 3) {
+                    btnP3.className = "px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-pink-500 text-white shadow-sm";
+                    btnP6.className = "px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-gray-600 hover:text-gray-900";
+                } else {
+                    btnP6.className = "px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-purple-500 text-white shadow-sm";
+                    btnP3.className = "px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-gray-600 hover:text-gray-900";
+                }
+            }
+
+            const rawPool = curriculumData[gameState.grade] ? curriculumData[gameState.grade][gameState.category] : [];
+            const count = rawPool ? rawPool.length : 0;
+            document.getElementById('vocab-title').innerText = `${gameState.grade === 6 ? count : 50} 題核心詞語特訓`;
+            document.getElementById('idiom-title').innerText = `${gameState.grade === 6 ? (curriculumData[6].idiom.length) : 15} 題成語必考精選`;
+
             const cheers = petCheers[gameState.pet] || ["加油！"];
             const randomCheer = cheers[Math.floor(Math.random() * cheers.length)];
             document.getElementById('quiz-pet-text').innerText = randomCheer;
@@ -584,9 +584,7 @@
             const key = getHistoryKey(grade, category);
             let history = getRecentHistory(grade, category);
             history.unshift(runWords);
-            if (history.length > 5) {
-                history = history.slice(0, 5);
-            }
+            if (history.length > 5) history = history.slice(0, 5);
             localStorage.setItem(key, JSON.stringify(history));
         }
 
@@ -600,29 +598,23 @@
                 ? curriculumData[gameState.grade][category] 
                 : [];
             
-            if (!rawPool || rawPool.length === 0) {
-                console.error("找不到相應級別或類別的題庫");
-                return;
-            }
+            if (!rawPool || rawPool.length === 0) return;
 
-            const targetCount = category === 'idiom' ? 15 : 50;
+            const targetCount = rawPool.length;
 
             const recentHistory = getRecentHistory(gameState.grade, category);
             const excludedWords = new Set();
             recentHistory.forEach(run => {
-                if (Array.isArray(run)) {
-                    run.forEach(w => excludedWords.add(w));
-                }
+                if (Array.isArray(run)) run.forEach(w => excludedWords.add(w));
             });
 
-            // 嘗試從未在最近歷史中出現的題目抽取
+            // 避開最近 5 次出過的題目，確保絕不重複
             let availablePool = rawPool.filter(item => !excludedWords.has(item.word));
-            
-            // 如果過濾後的題數不足，則直接使用整個原始題庫
             if (availablePool.length < targetCount) {
                 availablePool = [...rawPool];
             }
 
+            // 打亂題目順序
             const shuffled = [...availablePool].sort(() => Math.random() - 0.5);
             gameState.questions = shuffled.slice(0, Math.min(targetCount, shuffled.length));
 
@@ -653,9 +645,10 @@
             const currentStage = Math.floor(gameState.currentIndex / 10) + 1;
             document.getElementById('stage-badge-display').innerText = `階段 Stage ${currentStage}`;
 
+            // 從每道題目獨立擁有的句庫中隨機選出一句（如名校工作紙的經典句子）
             const randomSentenceIdx = Math.floor(Math.random() * qData.sentences.length);
             const fullSentence = qData.sentences[randomSentenceIdx];
-            const maskedSentence = fullSentence.replace(qData.word, "_______");
+            const maskedSentence = fullSentence.replace(new RegExp(qData.word, 'g'), "_______");
             
             document.getElementById('question-sentence-text').innerText = maskedSentence;
             document.getElementById('quiz-category-tag').innerText = gameState.category === 'vocab' ? '核心詞語填充' : '成語意境填充';
@@ -676,7 +669,7 @@
             const container = document.getElementById('choice-container');
             container.innerHTML = '';
 
-            const rawPool = curriculumData[gameState.grade][gameState.category];
+            const rawPool = curriculumData[gameState.grade][gameState.category] || [];
             const distractors = rawPool.filter(i => i.word !== correctItem.word)
                                       .sort(() => Math.random() - 0.5)
                                       .slice(0, 3);
@@ -695,9 +688,7 @@
 
         function submitFillAnswer() {
             const inputVal = document.getElementById('fill-answer-input').value.trim();
-            if (!inputVal) {
-                return;
-            }
+            if (!inputVal) return;
             const correctWord = gameState.currentQuestion.word;
             checkAnswer(inputVal === correctWord, gameState.currentQuestion);
         }
@@ -716,9 +707,7 @@
             }
 
             const correctSpan = document.getElementById('correct-word-span');
-            if (correctSpan) {
-                correctSpan.innerText = qData.word;
-            }
+            if (correctSpan) correctSpan.innerText = qData.word;
             document.getElementById('feedback-definition').innerText = qData.definition;
             document.getElementById('feedback-modal').classList.remove('hidden');
         }

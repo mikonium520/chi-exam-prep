@@ -1,1269 +1,898 @@
-<!DOCTYPE html>
+一一<!DOCTYPE html>
 <html lang="zh-HK">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>小學中文詞語成語大冒險 - Interactive Learning App</title>
-    <!-- Google Fonts & FontAwesome -->
-    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <title>中文詞語成語大冒險 - Chinese Vocabulary Adventure</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', '"Nunito"', 'sans-serif'],
+                    },
+                    colors: {
+                        pastelPink: '#FFD1DC',
+                        pastelPurple: '#E2D9F3',
+                        pastelBlue: '#D4F0F7',
+                        pastelMint: '#D5F5E3',
+                        pastelYellow: '#FCF3CF',
+                        pastelOrange: '#FDEBD0',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root {
-            --pastel-pink: #FFD1DC;
-            --pastel-pink-light: #FFF0F5;
-            --pastel-purple: #E6E6FA;
-            --pastel-purple-light: #F8F0FE;
-            --pastel-blue: #BFE6FF;
-            --pastel-blue-light: #F0F8FF;
-            --pastel-green: #C1E1C1;
-            --pastel-green-light: #F0FFF4;
-            --pastel-yellow: #FDFD96;
-            --pastel-orange: #FFD8B1;
-            
-            --text-dark: #4A4A6A;
-            --text-muted: #7A7A9A;
-            --primary-accent: #FF7B9C;
-            --secondary-accent: #7C73E6;
-            --correct-color: #4EBE81;
-            --wrong-color: #FF6B6B;
-            
-            --card-radius: 24px;
-            --shadow-soft: 0 10px 25px rgba(124, 115, 230, 0.1);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Zen Maru Gothic', 'Noto Sans TC', sans-serif;
-            user-select: none;
-        }
-
         body {
-            background-color: var(--pastel-pink-light);
-            background-image: 
-                radial-gradient(var(--pastel-pink) 15%, transparent 16%),
-                radial-gradient(var(--pastel-purple) 15%, transparent 16%);
-            background-size: 60px 60px;
-            background-position: 0 0, 30px 30px;
-            color: var(--text-dark);
+            font-family: 'Noto Sans TC', sans-serif;
+            background: linear-gradient(135deg, #fff1f2 0%, #f3e8ff 50%, #e0f2fe 100%);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 15px;
-            position: relative;
-            overflow-x: hidden;
         }
-
-        .decoration-cloud {
-            position: fixed;
-            color: rgba(255, 255, 255, 0.85);
-            font-size: 4rem;
-            z-index: 0;
-            pointer-events: none;
-            animation: floatSlow 12s infinite ease-in-out;
+        .bg-pattern {
+            background-image: radial-gradient(#f472b6 0.75px, transparent 0.75px), radial-gradient(#60a5fa 0.75px, #fff1f2 0.75px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
         }
-        @keyframes floatSlow {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(3deg); }
-        }
-
-        .app-container {
-            width: 100%;
-            max-width: 880px;
-            background: rgba(255, 255, 255, 0.94);
-            backdrop-filter: blur(10px);
-            border-radius: var(--card-radius);
-            box-shadow: var(--shadow-soft);
-            border: 4px solid #FFFFFF;
-            padding: 25px;
-            position: relative;
-            z-index: 10;
-            margin-top: 10px;
-            margin-bottom: 20px;
-        }
-
-        .top-navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: linear-gradient(135deg, var(--pastel-purple-light), var(--pastel-blue-light));
-            padding: 12px 20px;
-            border-radius: 20px;
-            margin-bottom: 20px;
-            border: 2px solid #FFF;
-        }
-
-        .user-info-pill {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: white;
-            padding: 6px 16px;
-            border-radius: 30px;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.05);
-            font-weight: 700;
-        }
-
-        .nav-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn-nav {
-            background: white;
-            border: 2px solid var(--pastel-purple);
-            color: var(--secondary-accent);
-            padding: 8px 14px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .btn-nav:hover {
-            background: var(--pastel-purple);
-            transform: translateY(-2deg);
-        }
-
-        .app-greeting {
-            font-size: 1.8rem;
-            font-weight: 900;
-            color: var(--primary-accent);
-            text-shadow: 2px 2px 0px #FFF, 3px 3px 0px var(--pastel-pink);
-            margin-bottom: 6px;
-            text-align: center;
-        }
-        .app-subtitle {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            text-align: center;
-        }
-
-        .btn-kawaii {
-            background: var(--primary-accent);
-            color: white;
-            border: none;
-            padding: 14px 28px;
-            border-radius: 30px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 5px 0px #E04368, 0 8px 15px rgba(255, 123, 156, 0.4);
-            transition: all 0.15s ease;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .btn-kawaii:hover {
-            transform: translateY(-2deg);
-            box-shadow: 0 7px 0px #E04368, 0 10px 20px rgba(255, 123, 156, 0.4);
-        }
-
-        .pet-selector {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin: 15px 0 25px 0;
-            flex-wrap: wrap;
-        }
-        .pet-card {
-            background: white;
-            border: 3px solid var(--pastel-purple);
-            border-radius: 20px;
-            padding: 8px 12px;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.2s;
-            width: 90px;
-        }
-        .pet-card.selected {
-            border-color: var(--primary-accent);
-            background: var(--pastel-pink-light);
-            transform: scale(1.08);
-            box-shadow: 0 5px 15px rgba(255, 123, 156, 0.3);
-        }
-        .pet-avatar { font-size: 2rem; margin-bottom: 2px; }
-        .pet-name { font-size: 0.85rem; font-weight: 700; }
-
-        .grade-entry-cards {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin: 20px 0;
-        }
-        @media (max-width: 600px) { .grade-entry-cards { grid-template-columns: 1fr; } }
-        .grade-entry-card {
-            background: linear-gradient(135deg, #FFF, var(--pastel-pink-light));
-            border: 4px solid var(--pastel-pink);
-            border-radius: 24px;
-            padding: 25px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.03);
-        }
-        .grade-entry-card.p6 {
-            background: linear-gradient(135deg, #FFF, var(--pastel-blue-light));
-            border-color: var(--pastel-blue);
-        }
-        .grade-entry-card:hover {
-            transform: translateY(-5deg);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.08);
-        }
-        .grade-entry-icon { font-size: 3rem; margin-bottom: 10px; }
-
-        .select-group {
-            background: white;
-            border: 2px solid var(--pastel-purple);
-            border-radius: 20px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-        .select-title {
-            font-weight: 700;
-            color: var(--secondary-accent);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .select-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 10px;
-        }
-        .opt-btn {
-            background: var(--pastel-purple-light);
-            border: 2px solid transparent;
-            padding: 12px;
-            border-radius: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.2s;
-        }
-        .opt-btn.active {
-            background: white;
-            border-color: var(--primary-accent);
-            color: var(--primary-accent);
-            box-shadow: 0 4px 10px rgba(255,123,156,0.2);
-        }
-
-        .quiz-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--pastel-purple-light);
-            padding: 12px 20px;
-            border-radius: 16px;
-            margin-bottom: 15px;
-            font-weight: 700;
-        }
-        .progress-bar-bg {
-            height: 12px;
-            background: #EAEAEA;
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 15px 0;
-        }
-        .progress-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--pastel-pink), var(--primary-accent));
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        .question-box {
-            background: white;
-            border: 3px solid var(--pastel-purple);
-            border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 20px;
-            font-size: 1.3rem;
-            line-height: 1.8;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
-        }
-        .question-tag {
-            display: inline-block;
-            background: var(--pastel-orange);
-            color: #8A4B00;
-            font-size: 0.8rem;
-            font-weight: 700;
-            padding: 4px 12px;
-            border-radius: 12px;
-            margin-bottom: 10px;
-        }
-
-        .options-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-        @media (max-width: 500px) { .options-grid { grid-template-columns: 1fr; } }
-        
-        .option-btn {
-            background: white;
-            border: 2px solid var(--pastel-blue);
-            border-radius: 16px;
-            padding: 15px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-        }
-        .option-btn:hover {
-            background: var(--pastel-blue-light);
-            border-color: var(--secondary-accent);
-            transform: translateY(-2deg);
-        }
-
-        .fill-input-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            align-items: center;
-        }
-        .fill-input {
-            width: 100%;
-            max-width: 350px;
-            padding: 14px;
-            font-size: 1.3rem;
-            text-align: center;
-            border: 3px solid var(--pastel-purple);
-            border-radius: 16px;
-            outline: none;
-            font-weight: 700;
-        }
-
-        .handwriting-box {
-            background: white;
-            border: 2px dashed var(--pastel-purple);
-            border-radius: 16px;
-            padding: 10px;
-            text-align: center;
-        }
-        #hw-canvas {
-            border: 1px solid #DDD;
-            border-radius: 10px;
-            background: #FFFDF9;
-            cursor: crosshair;
-            touch-action: none;
-        }
-
-        .leaderboards-parallel {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 30px;
-        }
-        @media (max-width: 650px) { .leaderboards-parallel { grid-template-columns: 1fr; } }
-        .leaderboard-card {
-            background: white;
-            border-radius: 20px;
-            padding: 15px;
-            border: 2px solid var(--pastel-purple);
-        }
-        .leaderboard-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-            font-size: 0.88rem;
-        }
-        .leaderboard-table th, .leaderboard-table td {
-            padding: 8px;
-            text-align: center;
-            border-bottom: 1px solid var(--pastel-purple-light);
-        }
-        .leaderboard-table th {
-            background: var(--pastel-purple-light);
-            color: var(--secondary-accent);
-            font-weight: 700;
-        }
-
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(74, 74, 106, 0.6);
-            backdrop-filter: blur(4px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.3s ease;
-        }
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .modal-card {
-            background: white;
-            border-radius: 28px;
-            width: 90%;
-            max-width: 520px;
-            padding: 28px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-            text-align: center;
-            transform: scale(0.85);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 4px solid #FFF;
-        }
-        .modal-overlay.active .modal-card { transform: scale(1); }
-
-        .pet-modal-avatar {
-            font-size: 3.8rem;
-            animation: bounce 1s infinite ease-in-out;
-            margin-bottom: 8px;
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .explanation-text {
-            background: var(--pastel-purple-light);
-            padding: 15px;
-            border-radius: 16px;
-            text-align: left;
-            margin: 15px 0;
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        .rank-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #FFD700, #FFA500);
-            color: white;
-            font-size: 0.8rem;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .btn-welcome-grade {
-            flex: 1;
-            padding: 14px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            border-radius: 20px;
-            border: 2px solid var(--pastel-purple);
-            background: white;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .btn-welcome-grade.selected {
-            background: var(--pastel-pink-light);
-            border-color: var(--primary-accent);
-            color: var(--primary-accent);
-            box-shadow: 0 4px 12px rgba(255,123,156,0.25);
-        }
-
-        .mistake-card-item {
-            background: white;
-            border: 2px solid var(--pastel-purple);
-            border-radius: 16px;
-            padding: 14px;
-            margin-bottom: 12px;
-            line-height: 1.6;
-        }
-
-        .hidden { display: none !important; }
     </style>
 </head>
-<body>
+<body class="text-gray-700 antialiased bg-pattern">
 
-    <i class="fa-solid fa-cloud decoration-cloud" style="top: 5%; left: 3%;"></i>
-    <i class="fa-solid fa-cloud decoration-cloud" style="top: 22%; right: 4%; animation-delay: 2s;"></i>
+    <!-- 1. 歡迎與萌寵選擇彈窗 (Welcome & Pet Companion Selection Modal) -->
+    <div id="welcome-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-xl w-full p-6 md:p-8 border-4 border-pastelPink text-center relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-pastelPink rounded-full opacity-50 pointer-events-none"></div>
+            <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-pastelBlue rounded-full opacity-50 pointer-events-none"></div>
 
-    <!-- 1. 初次登錄歡迎 Pop-up 彈窗 -->
-    <div class="modal-overlay active" id="modal-welcome">
-        <div class="modal-card" style="background: linear-gradient(135deg, #FFF, var(--pastel-pink-light));">
-            <div class="pet-modal-avatar">✨🐶✨</div>
-            <h2 style="font-size: 1.6rem; color: var(--primary-accent); margin-bottom: 8px;">歡迎來到詞語大冒險！</h2>
-            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">請輸入名字並點選你的挑戰年級！</p>
-            
-            <div style="margin-bottom: 15px; text-align: left;">
-                <label style="font-weight: 700; font-size: 0.9rem; display: block; margin-bottom: 6px;">你的名字：</label>
-                <input type="text" id="welcome-name-input" class="fill-input" value="樂樂" style="width: 100%; max-width: 100%;">
+            <h1 class="text-3xl md:text-4xl font-black text-pink-500 mb-2">🐾 歡迎來到詞語大冒險！🌟</h1>
+            <p class="text-gray-500 text-sm md:text-base mb-6">詞語與成語闖關特訓 (萌寵陪伴版)</p>
+
+            <!-- Name Input -->
+            <div class="mb-5 text-left">
+                <label class="block font-bold text-gray-700 mb-1 text-sm">請輸入你的大名或暱稱：</label>
+                <input type="text" id="player-name-input" placeholder="例如：可樂餅" value="可樂餅" class="w-full px-4 py-3 rounded-2xl border-2 border-gray-200 focus:border-pink-400 focus:outline-none text-lg font-bold text-center">
             </div>
 
-            <div style="margin-bottom: 20px; text-align: left;">
-                <label style="font-weight: 700; font-size: 0.9rem; display: block; margin-bottom: 6px;">挑選年級（點擊按鈕）：</label>
-                <div style="display: flex; gap: 12px;">
-                    <button class="btn-welcome-grade selected" id="welcome-btn-p3" onclick="selectWelcomeGrade('P3')">🌸 三年級</button>
-                    <button class="btn-welcome-grade" id="welcome-btn-p6" onclick="selectWelcomeGrade('P6')">🌿 六年級</button>
+            <!-- Pet Companion Selection -->
+            <div class="mb-6 text-left">
+                <label class="block font-bold text-gray-700 mb-2 text-sm">🐾選擇你的陪伴萌寵戰友：</label>
+                <div class="grid grid-cols-4 gap-3">
+                    <label class="cursor-pointer">
+                        <input type="radio" name="pet" value="🐶" class="peer hidden" checked>
+                        <div class="border-2 border-gray-200 rounded-2xl p-3 text-center peer-checked:border-pink-500 peer-checked:bg-pink-50 transition-all hover:bg-gray-50">
+                            <div class="text-3xl mb-1">🐶</div>
+                            <div class="text-xs font-bold text-gray-700">柴犬</div>
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="pet" value="🐰" class="peer hidden">
+                        <div class="border-2 border-gray-200 rounded-2xl p-3 text-center peer-checked:border-pink-500 peer-checked:bg-pink-50 transition-all hover:bg-gray-50">
+                            <div class="text-3xl mb-1">🐰</div>
+                            <div class="text-xs font-bold text-gray-700">兔兔</div>
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="pet" value="🐱" class="peer hidden">
+                        <div class="border-2 border-gray-200 rounded-2xl p-3 text-center peer-checked:border-pink-500 peer-checked:bg-pink-50 transition-all hover:bg-gray-50">
+                            <div class="text-3xl mb-1">🐱</div>
+                            <div class="text-xs font-bold text-gray-700">貓咪</div>
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="pet" value="🐻" class="peer hidden">
+                        <div class="border-2 border-gray-200 rounded-2xl p-3 text-center peer-checked:border-pink-500 peer-checked:bg-pink-50 transition-all hover:bg-gray-50">
+                            <div class="text-3xl mb-1">🐻</div>
+                            <div class="text-xs font-bold text-gray-700">熊熊</div>
+                        </div>
+                    </label>
                 </div>
             </div>
 
-            <button class="btn-kawaii" onclick="completeLogin()" style="width: 100%;">踏上冒險之旅 🚀</button>
+            <!-- Grade Selection Buttons -->
+            <label class="block font-bold text-gray-700 mb-2 text-sm text-left">選擇溫習級別與題庫：</label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <button type="button" id="btn-p3" class="w-full bg-gradient-to-r from-pink-400 to-rose-400 text-white font-black py-4 px-6 rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all flex items-center justify-center space-x-2 text-lg">
+                    <span>📚 三年級中文 (P.3)</span>
+                </button>
+                <button type="button" id="btn-p6" class="w-full bg-gradient-to-r from-purple-400 to-indigo-400 text-white font-black py-4 px-6 rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all flex items-center justify-center space-x-2 text-lg">
+                    <span>🎓 六年級中文 (P.6)</span>
+                </button>
+            </div>
         </div>
     </div>
 
-    <!-- 主應用容器 -->
-    <div class="app-container">
+    <!-- Main Container -->
+    <div id="main-app" class="max-w-5xl mx-auto px-4 py-6 hidden">
         
-        <!-- 頂部導航列 -->
-        <div class="top-navbar">
-            <div class="user-info-pill">
-                <span id="nav-pet-icon">🐶</span>
-                <span id="nav-player-name">樂樂</span>
-                <span class="rank-badge" id="nav-rank-badge">童生小試 🎓</span>
-                <span style="color: var(--primary-accent); margin-left: 4px;">★ <span id="nav-score">0</span></span>
+        <!-- 2. 主頁頂部 (Header & Info Bar with Companion Avatar) -->
+        <header class="bg-white/90 backdrop-blur rounded-3xl shadow-md p-5 mb-6 flex flex-col md:flex-row items-center justify-between border-2 border-pastelPink">
+            <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                <div id="pet-avatar-display" class="text-4xl bg-pink-100 p-3 rounded-2xl shadow-inner">🐶</div>
+                <div>
+                    <h2 class="text-xl font-black text-gray-800" id="header-greeting">你好, 可樂餅! 準備溫習了嗎？✨</h2>
+                    <p class="text-xs text-gray-500 font-semibold" id="header-subtitle">級別：三年級 | 萌寵：柴柴| 當前頭銜：詞語小萌新</p>
+                </div>
             </div>
-            
-            <div class="nav-actions">
-                <button class="btn-nav" onclick="showMistakesModal()">
-                    <i class="fa-solid fa-book-bookmark"></i> 錯題集 📖
+            <div class="flex items-center space-x-3">
+                <button type="button" id="btn-mistakes" class="bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold px-4 py-2.5 rounded-2xl text-sm transition-all flex items-center space-x-1 shadow-sm">
+                    <span>📖 查看錯題集</span>
                 </button>
-                <button class="btn-nav hidden" id="btn-return-home" onclick="confirmReturnHome()">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i> 放棄退出 🚪
+                <button type="button" id="btn-home" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold px-4 py-2.5 rounded-2xl text-sm transition-all flex items-center space-x-1 shadow-sm">
+                    <span>🏠 返回主頁</span>
                 </button>
             </div>
-        </div>
+        </header>
 
-        <!-- 2. 主頁 View -->
-        <div id="view-home">
-            <h1 class="app-greeting" id="app-greeting-title">你好，樂樂！準備溫習了嗎？✨</h1>
-            <p class="app-subtitle">當前累計積分：<span id="home-cum-score" style="color:var(--primary-accent); font-weight:bold;">0</span> 分 | 當前頭銜：<span id="home-rank-title" class="rank-badge">童生小試 🎓</span></p>
+        <!-- Dashboard View / Mode Selection -->
+        <div id="dashboard-view" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Card 1: 50 Core Vocabularies -->
+                <div class="bg-white/90 backdrop-blur rounded-3xl shadow-md p-6 border-2 border-pastelBlue flex flex-col justify-between">
+                    <div>
+                        <div class="inline-block bg-blue-100 text-blue-700 font-bold px-3 py-1 rounded-xl text-xs mb-3">核心詞彙大挑戰</div>
+                        <h3 class="text-2xl font-black text-gray-800 mb-2">50 題核心詞語特訓</h3>
+                        <p class="text-gray-500 text-sm mb-6">包含 50 個不重覆核心詞語，涵蓋情境填充與標準釋義解析。</p>
+                    </div>
+                    <div class="space-y-3">
+                        <button type="button" id="btn-vocab-choice" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-2xl shadow transition-all text-center">
+                            ⚡ 50題選擇題模式 (有選項)
+                        </button>
+                        <button type="button" id="btn-vocab-fill" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-4 rounded-2xl shadow transition-all text-center">
+                            ✍️ 50題不供詞填充 (文字輸入)
+                        </button>
+                    </div>
+                </div>
 
-            <!-- 主頁挑選萌寵戰友 -->
-            <div style="text-align: center; margin-top: 15px;">
-                <label style="font-weight: 700; font-size: 0.95rem;">🐾 挑選陪伴戰友：</label>
-                <div class="pet-selector">
-                    <div class="pet-card selected" onclick="selectPet('shiba', '柴柴', '🐶')">
-                        <div class="pet-avatar">🐶</div>
-                        <div class="pet-name">柴柴</div>
+                <!-- Card 2: 15 Idioms -->
+                <div class="bg-white/90 backdrop-blur rounded-3xl shadow-md p-6 border-2 border-pastelPurple flex flex-col justify-between">
+                    <div>
+                        <div class="inline-block bg-purple-100 text-purple-700 font-bold px-3 py-1 rounded-xl text-xs mb-3">成語精靈特訓</div>
+                        <h3 class="text-2xl font-black text-gray-800 mb-2">15 題成語必考精選</h3>
+                        <p class="text-gray-500 text-sm mb-6">包含 15 個不重覆成語精華，深度掌握意境典故與正確運用語境。</p>
                     </div>
-                    <div class="pet-card" onclick="selectPet('bunny', '兔兔', '🐰')">
-                        <div class="pet-avatar">🐰</div>
-                        <div class="pet-name">兔兔</div>
-                    </div>
-                    <div class="pet-card" onclick="selectPet('panda', '熊貓', '🐼')">
-                        <div class="pet-avatar">🐼</div>
-                        <div class="pet-name">熊貓</div>
-                    </div>
-                    <div class="pet-card" onclick="selectPet('cat', '咪咪', '🐱')">
-                        <div class="pet-avatar">🐱</div>
-                        <div class="pet-name">咪咪</div>
-                    </div>
-                    <div class="pet-card" onclick="selectPet('bear', '熊大', '🐻')">
-                        <div class="pet-avatar">🐻</div>
-                        <div class="pet-name">熊大</div>
+                    <div class="space-y-3">
+                        <button type="button" id="btn-idiom-choice" class="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-4 rounded-2xl shadow transition-all text-center">
+                            ⚡ 15題成語選擇題模式
+                        </button>
+                        <button type="button" id="btn-idiom-fill" class="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-4 rounded-2xl shadow transition-all text-center">
+                            ✍️ 15題成語不供詞填充 (文字輸入)
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <!-- 主頁年級入口卡片 -->
-            <div class="grade-entry-cards">
-                <div class="grade-entry-card" onclick="goToGradePage('P3')">
-                    <div class="grade-entry-icon">🌸</div>
-                    <h2>三年級中文詞語</h2>
-                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">50個詞語 + 15個成語 (各10條題)</p>
+            <!-- Leaderboards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+                <div class="bg-white/90 backdrop-blur rounded-3xl shadow-md p-6 border-2 border-pink-100">
+                    <h3 class="text-lg font-black text-gray-800 mb-4 flex items-center justify-between">
+                        <span>🏆 三年級挑戰英雄榜</span>
+                        <span class="text-xs font-normal text-gray-400">Top 5</span>
+                    </h3>
+                    <div id="leaderboard-p3" class="space-y-2"></div>
                 </div>
-                <div class="grade-entry-card p6" onclick="goToGradePage('P6')">
-                    <div class="grade-entry-icon">🌿</div>
-                    <h2>六年級中文詞語</h2>
-                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">50個詞語 + 15個成語 (各10條題)</p>
-                </div>
-            </div>
-
-            <!-- 雙欄排行榜 -->
-            <div class="leaderboards-parallel">
-                <div class="leaderboard-card">
-                    <h3 style="text-align: center; color: var(--primary-accent);"><i class="fa-solid fa-trophy"></i> 三年級排行榜 🌸</h3>
-                    <table class="leaderboard-table">
-                        <thead><tr><th>排名</th><th>玩家</th><th>累計分數</th><th>頭銜</th></tr></thead>
-                        <tbody id="lb-p3-body"></tbody>
-                    </table>
-                </div>
-
-                <div class="leaderboard-card">
-                    <h3 style="text-align: center; color: var(--secondary-accent);"><i class="fa-solid fa-trophy"></i> 六年級排行榜 🌿</h3>
-                    <table class="leaderboard-table">
-                        <thead><tr><th>排名</th><th>玩家</th><th>累計分數</th><th>頭銜</th></tr></thead>
-                        <tbody id="lb-p6-body"></tbody>
-                    </table>
+                <div class="bg-white/90 backdrop-blur rounded-3xl shadow-md p-6 border-2 border-purple-100">
+                    <h3 class="text-lg font-black text-gray-800 mb-4 flex items-center justify-between">
+                        <span>🏆 六年級挑戰英雄榜</span>
+                        <span class="text-xs font-normal text-gray-400">Top 5</span>
+                    </h3>
+                    <div id="leaderboard-p6" class="space-y-2"></div>
                 </div>
             </div>
         </div>
 
-        <!-- 3. 二級選單 View (模式與題數選擇) -->
-        <div id="view-modes" class="hidden">
-            <div style="text-align: center; margin-bottom: 20px;">
-                <h2 id="mode-page-title" style="color: var(--secondary-accent); font-size: 1.8rem;">🌸 三年級中文詞語</h2>
-                <p style="color: var(--text-muted);">請設定題型與挑戰題數：</p>
-            </div>
-
-            <!-- 選擇題型 -->
-            <div class="select-group">
-                <div class="select-title"><i class="fa-solid fa-sliders"></i> 選擇題型：</div>
-                <div class="select-options">
-                    <button class="opt-btn active" id="opt-mode-mc" onclick="setQuizMode('mc')">💡 第一類：理解選擇題</button>
-                    <button class="opt-btn" id="opt-mode-fill" onclick="setQuizMode('fill')">✍️ 第二類：不供詞填充題</button>
+        <!-- Quiz Arena View -->
+        <div id="quiz-view" class="hidden space-y-6">
+            <!-- Quiz Progress & Stage Header -->
+            <div class="bg-white/90 backdrop-blur rounded-3xl shadow-md p-5 border-2 border-pastelMint flex flex-col sm:flex-row items-center justify-between">
+                <div class="flex items-center space-x-3 mb-3 sm:mb-0">
+                    <div id="quiz-mode-badge" class="bg-green-100 text-green-700 font-bold px-3 py-1 rounded-xl text-xs">選擇題模式</div>
+                    <div class="text-sm font-bold text-gray-600" id="quiz-progress-text">題目: 1 / 50</div>
+                </div>
+                <div class="flex items-center space-x-4 w-full sm:w-auto">
+                    <div class="w-full sm:w-48 bg-gray-100 rounded-full h-3 overflow-hidden">
+                        <div id="quiz-progress-bar" class="bg-green-400 h-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                    <div class="text-sm font-black text-pink-500 whitespace-nowrap" id="quiz-score-display">得分: 0</div>
                 </div>
             </div>
 
-            <!-- 選擇題數 -->
-            <div class="select-group">
-                <div class="select-title"><i class="fa-solid fa-list-ol"></i> 選擇挑戰題數：</div>
-                <div class="select-options">
-                    <button class="opt-btn active" id="opt-count-65" onclick="setQuizCount(65)">🏆 全套大冒險 (65題)</button>
-                    <button class="opt-btn" id="opt-count-50" onclick="setQuizCount(50)">📖 詞語專攻 (50題)</button>
-                    <button class="opt-btn" id="opt-count-15" onclick="setQuizCount(15)">⚡ 只做成語 (精確15題)</button>
+            <!-- Question Card Box -->
+            <div class="bg-white/95 backdrop-blur rounded-3xl shadow-lg p-6 md:p-8 border-2 border-gray-100 relative">
+                <div class="absolute top-4 right-4 flex items-center space-x-2">
+                    <div id="companion-cheer-badge" class="bg-pink-100 text-pink-700 font-bold text-xs px-3 py-1 rounded-xl flex items-center space-x-1">
+                        <span id="quiz-pet-icon">🐶</span>
+                        <span id="quiz-pet-text">加油啊！</span>
+                    </div>
+                    <div id="stage-badge-display" class="bg-yellow-100 text-yellow-800 font-bold text-xs px-3 py-1 rounded-xl">階段 Stage 1</div>
                 </div>
-            </div>
-
-            <div style="text-align: center; margin-top: 25px; display: flex; justify-content: center; gap: 15px;">
-                <button class="btn-nav" onclick="confirmReturnHome(true)"><i class="fa-solid fa-arrow-left"></i> 返回主頁</button>
-                <button class="btn-kawaii" onclick="startQuiz()">開始挑戰 🚀</button>
-            </div>
-        </div>
-
-        <!-- 4. 答題 View -->
-        <div id="view-quiz" class="hidden">
-            <div class="quiz-header">
-                <div><span id="quiz-grade-label">P3</span> | <span id="quiz-mode-label">選擇題</span></div>
-                <div>第 <span id="quiz-current-idx">1</span> / <span id="quiz-total-count">15</span> 題</div>
-                <div>本局得分: <span id="quiz-score" style="color: var(--primary-accent);">0</span></div>
-            </div>
-
-            <div class="progress-bar-bg">
-                <div class="progress-bar-fill" id="quiz-progress-fill"></div>
-            </div>
-
-            <div class="question-box">
-                <span class="question-tag" id="question-tag">詞語理解</span>
-                <div id="question-text">題目加載中...</div>
-            </div>
-
-            <!-- 選擇題 Container -->
-            <div id="container-mc-options" class="options-grid"></div>
-
-            <!-- 填充題 Container -->
-            <div id="container-fill-input" class="fill-input-container hidden">
-                <input type="text" id="user-fill-answer" class="fill-input" placeholder="在此輸入答案..." autocomplete="off">
                 
-                <div class="handwriting-box">
-                    <label style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 5px;">✍️ 手寫練習格：</label>
-                    <canvas id="hw-canvas" width="280" height="150"></canvas>
-                    <div style="margin-top: 6px;">
-                        <button class="btn-nav" onclick="clearCanvas()" style="padding: 3px 10px; font-size: 0.8rem;"><i class="fa-solid fa-eraser"></i> 清除筆劃</button>
+                <h4 class="text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider" id="quiz-category-tag">情境填充題</h4>
+                <p class="text-lg md:text-xl font-bold text-gray-800 mb-6 leading-relaxed" id="question-sentence-text">
+                    載入中...
+                </p>
+
+                <!-- Choice Mode Container -->
+                <div id="choice-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6"></div>
+
+                <!-- Fill Mode Container -->
+                <div id="fill-container" class="hidden space-y-6 mb-6">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">請在下方輸入正確的詞語/成語：</label>
+                        <div class="flex space-x-2">
+                            <input type="text" id="fill-answer-input" placeholder="請輸入答案..." class="flex-1 px-4 py-3 rounded-2xl border-2 border-gray-200 focus:border-pink-400 focus:outline-none text-lg font-bold">
+                            <button type="button" id="btn-submit-fill" class="bg-pink-500 hover:bg-pink-600 text-white font-bold px-6 py-3 rounded-2xl shadow transition-all">提交答案</button>
+                        </div>
                     </div>
                 </div>
-
-                <button class="btn-kawaii" onclick="submitFillAnswer()">提交答案 <i class="fa-solid fa-paper-plane"></i></button>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Modal：答案解釋 Pop-up 彈窗 -->
-    <div class="modal-overlay" id="modal-feedback">
-        <div class="modal-card">
-            <div class="pet-modal-avatar" id="modal-pet-avatar">🐶</div>
-            <h2 style="font-size: 1.5rem; font-weight: 900; margin-bottom: 10px;" id="modal-feedback-title">回答正確！</h2>
-            <div class="explanation-text" id="modal-explanation-body">...</div>
-            <button class="btn-kawaii" id="btn-next-question" onclick="closeFeedbackModal()">下一題 / 繼續冒險 <i class="fa-solid fa-arrow-right"></i></button>
-        </div>
-    </div>
-
-    <!-- Modal：階段喘息驛站 Pop-up (10題) -->
-    <div class="modal-overlay" id="modal-stage">
-        <div class="modal-card" style="background: linear-gradient(135deg, #FFF, var(--pastel-pink-light));">
-            <div class="pet-modal-avatar" id="modal-stage-pet">🐶</div>
-            <h2 style="font-size: 1.5rem; color: var(--primary-accent); margin-bottom: 6px;" id="modal-stage-title">🌸 階段小結打氣！</h2>
-            <p id="modal-stage-subtitle" style="margin-bottom: 12px; font-weight: 700;">已順利突破 10 道難關！</p>
-            <div class="explanation-text" id="modal-stage-content" style="text-align: center; background: white;">...</div>
-            <button class="btn-kawaii" onclick="closeStageModal()">繼續下一個挑戰 🚀</button>
-        </div>
-    </div>
-
-    <!-- Modal：錯題集 Pop-up -->
-    <div class="modal-overlay" id="modal-mistakes">
-        <div class="modal-card" style="max-width: 620px; text-align: left;">
-            <h2 style="text-align: center; color: var(--secondary-accent); margin-bottom: 15px;"><i class="fa-solid fa-book-bookmark"></i> 我的錯題集</h2>
-            <div class="explanation-text" id="mistakes-list-body" style="max-height: 350px; overflow-y: auto; background: var(--pastel-purple-light);">尚無錯題紀錄！</div>
-            <div style="display: flex; justify-content: space-between; gap: 10px; margin-top: 15px;">
-                <button class="btn-nav" onclick="downloadMistakes()"><i class="fa-solid fa-download"></i> 下載 TXT 錯題集</button>
-                <button class="btn-kawaii" onclick="closeMistakesModal()" style="padding: 8px 20px; font-size: 0.95rem;">關閉</button>
             </div>
         </div>
     </div>
 
+    <!-- 5. 答題回饋彈窗 (Answer & Explanation Popup Modal) -->
+    <div id="feedback-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 hidden">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 md:p-8 border-4 border-pastelPink text-center relative overflow-hidden">
+            <div id="feedback-icon" class="text-5xl mb-3">🎉</div>
+            <h3 id="feedback-title" class="text-2xl font-black text-gray-800 mb-2">答對了！</h3>
+            <p id="feedback-msg" class="text-gray-600 text-sm mb-4 font-semibold">你太棒了！正確答案是：<span id="correct-word-span" class="text-pink-600 font-bold"></span></p>
+            
+            <div class="bg-gray-50 rounded-2xl p-4 text-left mb-6 border border-gray-200">
+                <h5 class="text-xs font-bold text-gray-400 uppercase mb-1">標準字詞釋義</h5>
+                <p id="feedback-definition" class="text-sm text-gray-700 leading-relaxed">釋義載入中...</p>
+            </div>
+
+            <button type="button" id="btn-next-q" class="w-full bg-gradient-to-r from-pink-400 to-rose-400 text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg hover:shadow-xl transition-all">
+                下一題 ➔
+            </button>
+        </div>
+    </div>
+
+    <!-- 階段休息喘息 Modal (Stage Break Modal) -->
+    <div id="stage-break-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 hidden">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 md:p-8 border-4 border-pastelBlue text-center">
+            <div class="text-5xl mb-3" id="stage-break-pet-icon">🐶</div>
+            <h3 class="text-2xl font-black text-blue-600 mb-2" id="stage-break-title">階段完成！</h3>
+            <p class="text-gray-600 text-sm mb-6" id="stage-break-desc">太厲害了！你已經順利完成了 10 道題目，萌寵陪你休息一下，喝杯水再繼續下一階段吧！</p>
+            <div class="flex space-x-3">
+                <button type="button" id="btn-resume-quiz" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg hover:shadow-xl transition-all">
+                    繼續挑戰下一階段 🚀
+                </button>
+                <button type="button" id="btn-stage-home" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-3 px-4 rounded-2xl transition-all">
+                    返回主頁
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 遊戲結束結算 Modal (Game Complete Modal) -->
+    <div id="game-over-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 hidden">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 md:p-8 border-4 border-pastelYellow text-center">
+            <div class="text-5xl mb-3">🏆</div>
+            <h3 class="text-2xl font-black text-amber-600 mb-2">冒險大功告成！</h3>
+            <p class="text-gray-600 text-sm mb-4" id="game-over-summary">你已成功完成本次所有挑戰！</p>
+            
+            <div class="bg-amber-50 rounded-2xl p-4 mb-6 border border-amber-200">
+                <div class="text-sm font-bold text-amber-800 mb-1" id="final-title-badge">獲得頭銜：語文探險家</div>
+                <div class="text-2xl font-black text-amber-600" id="final-score-text">最終得分: 100 分</div>
+            </div>
+
+            <div class="flex space-x-3">
+                <button type="button" id="btn-restart-quiz" class="flex-1 bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-4 rounded-2xl shadow transition-all">
+                    重玩一次 (自動避開前5次記錄)
+                </button>
+                <button type="button" id="btn-gameover-home" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-3 px-4 rounded-2xl transition-all">
+                    返回主頁
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 錯題集 Modal (Mistake Notebook Modal) -->
+    <div id="mistake-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 hidden">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full p-6 md:p-8 border-4 border-amber-200 flex flex-col max-h-[85vh]">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-black text-gray-800">📖 我的專屬錯題筆記本</h3>
+                <button type="button" id="btn-close-mistake" class="text-gray-400 hover:text-gray-600 text-xl font-bold">✕</button>
+            </div>
+            <p class="text-xs text-gray-500 mb-4">這裏記錄了你在溫習中答錯過的題目與標準解析，溫故而知新！</p>
+            
+            <div id="mistake-list-container" class="flex-1 overflow-y-auto space-y-3 pr-2 mb-6"></div>
+
+            <div class="flex space-x-3">
+                <button type="button" id="btn-export-mistakes" class="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-4 rounded-2xl shadow transition-all text-sm">
+                    💾 下載純文字錯題集
+                </button>
+                <button type="button" id="btn-clear-mistakes" class="bg-red-100 hover:bg-red-200 text-red-700 font-bold py-3 px-4 rounded-2xl transition-all text-sm">
+                    清空錯題
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Application Logic & Database -->
     <script>
-        const RANKS = [
-            { minScore: 0, title: "童生小試 🎓" },
-            { minScore: 300, title: "詞語秀才 🌟" },
-            { minScore: 800, title: "成語舉人 📜" },
-            { minScore: 1500, title: "翰林學士 📚" },
-            { minScore: 2500, title: "語文狀元 🏆" },
-            { minScore: 4000, title: "中文大師 👑" },
-            { minScore: 6000, title: "國學宗師 🌟" },
-            { minScore: 10000, title: "語文至尊 👑" }
-        ];
+        // --- Application State ---
+        let gameState = {
+            playerName: "可樂餅",
+            pet: "🐶",
+            grade: 3,
+            category: "vocab", // 'vocab' or 'idiom'
+            mode: "choice",    // 'choice' or 'fill'
+            questions: [],
+            currentIndex: 0,
+            score: 0,
+            currentQuestion: null,
+            mistakes: []
+        };
 
-        /* 10 條動態完句情境題生成函數 */
-        function getOrGenerate10Sentences(wordObj) {
-            const d = wordObj.def;
-            return [
-                `句子完句練習（一）：「這道題目對應的句意是『${d}』，填入『_____』最為合適。」`,
-                `情境閱讀理解（二）：「同學們在文章中正確運用了『_____』一詞，表達出『${d}』的含意。」`,
-                `小學考卷題型（三）：「下列句子中，最適合填入『_____』來描繪『${d}』情景的是哪一項？」`,
-                `語文基礎應用（四）：「請根據語境選詞完句：這件事讓大家深刻體會到了『_____』（即${d}）。」`,
-                `寫作技巧測驗（五）：「他在寫作時使用了『_____』，精準反映了『${d}』的狀態。」`,
-                `詞語辨析填充（六）：「面對這種情況，他表現出『_____』的態度，意指${d}。」`,
-                `綜合完句考題（七）：「文中描寫的現象正符合『_____』的定義（${d}）。」`,
-                `句子搭配練習（八）：「要描述『${d}』，在語境中填入『_____』能使文章更生動。」`,
-                `成語詞語填空（九）：「句子缺詞練習：『大家聚在一起討論，展現了_____的精神。』（提示：${d}）」`,
-                `實戰完句測驗（十）：「請選出正確答案填入空格處：『這正是_____的最佳寫照。』（釋義：${d}）」`
-            ];
+        // --- Complete Curriculum Database ---
+        const curriculumData = {
+            3: {
+                vocab: [
+                    { word: "專心", definition: "專注於一事情，不分心。", sentences: ["上課時我們要_______地耹聽老師講解。", "弟弟做功課時十分_______，一下子就完成了。", "只要_______，再難的題目也能解決。", "媽媽稱讚我畫畫時態度_______。", "考試前夕，大家都在_______溫習。"] },
+                    { word: "熱鬧", definition: "景象繁盛活躍，充滿歡樂氣氛。", sentences: ["農曆新年時，年宵市場人山人海，十分_______。", "街上舞獅表演吸引了許多人圍觀，場面真_______。", "生日會上充滿了笑聲，氣氛十分_______。", "元宵節的燈會吸引了無數市民，十分_______。", "中秋節晚上，公園裏人聲鼎沸，熱鬧非凡。"] },
+                    { word: "整齊", definition: "有條理、不凌亂、有秩序。", sentences: ["放學後，值日生把課室打掃得乾乾_______。", "哥哥的書櫃收拾得井井有條，十分_______。", "升旗禮時，同學們排列得_______有序。", "做完實驗後，要把儀器擺放_______。", "軍人步操時步伐一致，衣着_______。"] },
+                    { word: "勇敢", definition: "不怕困難、危險，有氣魄。", sentences: ["消防員_______地衝進火場救人。", "小明在醫生面前表現得很_______，沒有哭鬧。", "面對挫折，我們要有_______的精神去克服。", "警察叔叔_______地捉拿壞人。", "這次攀爬活動需要_______的勇氣。"] },
+                    { word: "感謝", definition: "因得到別人的幫助或恩惠而心存感激。", sentences: ["我們要_______父母養育之恩。", "老師悉心教導，令我心存_______。", "多得你的幫助，我在此表示衷心的_______。", "收到大家的祝福，我感到十分_______。", "我們應當_______每一個默默付出的人。"] },
+                    { word: "欣賞", definition: "領略並享受美好的事物，或對人表示讚賞。", sentences: ["周末爸爸帶我去郊外_______大自然風景。", "老師_______我的繪畫作品充滿創意。", "音樂會上，觀眾陶醉地_______交響樂。", "我們學會互相_______對方的長處。", "站在山頂_______日落美景，令人心曠神怡。"] },
+                    { word: "豐富", definition: "種類多、數量大、充足。", sentences: ["圖書館裏藏書_______，滿足了我們的求知慾。", "媽媽為我們準備了_______的晚餐。", "這次旅行讓我獲得了_______的見聞。", "大自然為動物提供了_______的食物來源。", "展覽會展出了_______多樣的藝術品。"] },
+                    { word: "熱情", definition: "感情深厚、好客、熱誠溫和。", sentences: ["香港人待人_______，常常主動協助遊客。", "叔叔_______地招待遠道而來的客人。", "店員態度親切_______，令人留下好印象。", "義工們用_______的笑容迎接每一位長者。", "導遊向我們_______地介紹當地的歷史。"] },
+                    { word: "整潔", definition: "保持乾淨、清爽、有條理。", sentences: ["我們應該保持校服乾淨_______。", "整潔的家居環境有助身心健康。", "圖書角經同學整理後變得整齊_______。", "護士確保手術室保持高度_______。", "個人的儀容必須端莊_______。"] },
+                    { word: "安靜", definition: "沒有聲音、沉靜、不吵鬧。", sentences: ["圖書館內必須保持_______，以免影響別人。", "夜深了，四周變得一片_______。", "同學們在_______地閱讀課外書。", "大自然在清晨顯得格外寧靜_______。", "請大家保持_______，考試馬上開始。"] },
+                    { word: "認真", definition: "嚴肅不苟，做事不馬虎。", sentences: ["他對待工作十分_______，從不出錯。", "組長_______地耹聽大家的意見。", "態度_______是成功的基石。", "寫書法必須一筆一畫_______。", "老師讚賞小華學習態度_______。"] },
+                    { word: "努力", definition: "盡量使出力量，積極進取。", sentences: ["只要我們_______，定能達成夢想。", "運動員每日苦練，十分_______。", "弟弟為了考試溫習得很_______。", "成功屬於_______不懈的人。", "大家一起_______，合力完成壁報。"] },
+                    { word: "美麗", definition: "好看、漂亮、使人心情舒暢。", sentences: ["維多利亞港的夜景十分_______。", "公園裏盛開着_______的花朵。", "大自然展現出_______的姿態。", "蝴蝶擁有_______的花紋。", "這是一幅_______的山水畫。"] },
+                    { word: "快樂", definition: "感到幸福、舒暢、滿意。", sentences: ["祝你生日_______，心想事成。", "和小狗玩耍令我感到十分_______。", "助人为快乐之本，幫助別人最_______。", "童年時光充滿了_______的回憶。", "全家人聚在一起過節十分_______。"] },
+                    { word: "團結", definition: "聚結成一夥，和睦合作。", sentences: ["只要大家_______，就能克服困難。", "拔河比賽最講究隊員之間的_______。", "中華民族歷來重視力量的_______。", "班際球賽展現了班級的_______精神。", "_______就是力量。"] },
+                    { word: "誠實", definition: "言行跟思想一致，不說謊。", sentences: ["做人要_______，不可欺騙別人。", "小明拾金不昧，是一個_______的孩子。", "老師稱讚他知錯能改，十分_______。", "_______是建立信任的基礎。", "父母教導我們從小要_______守信。"] },
+                    { word: "守時", definition: "不遲到，遵守約定的時間。", sentences: ["我們約好八點集合，大家都要_______。", "火車準點出發，十分_______。", "守信用、_______是良好美德。", "遲到是不_______的表現。", "哥哥做事一向_______。"] },
+                    { word: "關心", definition: "把人或事放在心上，給予愛護。", sentences: ["感謝老師平日對我們的_______與照顧。", "同學們互相_______，情同手足。", "父母時刻_______子女的健康成長。", "我們要多_______社區裏的獨居長者。", "一句問候充滿了溫暖的_______。"] },
+                    { word: "幫助", definition: "給予物資或行動上的支援。", sentences: ["多謝你在危急時出手_______我。", "義工們定期探訪並_______有需要的人。", "互相_______是好朋友應有的態度。", "老師引導我們學會獨立與_______他人。", "警察叔叔熱心_______迷路的小童。"] },
+                    { word: "進步", definition: "向前發展，比原來更好。", sentences: ["經過努力溫習，我的中文成績進步了_______。", "只要每天吸收新知識，就會不斷_______。", "老師稱讚我在書法上有了很大_______。", "科技日新月異，社會迅速_______。", "學習態度改善了，成績自然_______。"] },
+                    { word: "聰明", definition: "天資高、智力強、反應快。", sentences: ["弟弟十分_______，一學就會。", "這個_______的孩子想出了好辦法。", "她頭腦靈活，是個_______的小女孩。", "_______的你一定能解開這個謎題。", "經過引導，大家發揮了_______才智。"] },
+                    { word: "清晨", definition: "太陽剛剛出來的早晨。", sentences: ["_______的公園裏有許多人在晨運。", "清晨空氣清新，令人心曠神怡。", "鳥兒在清晨的樹枝上歌唱。", "清晨露水滋潤着小草。", "他習慣在清晨跑步鍛煉身體。"] },
+                    { word: "黃昏", definition: "日落前後天色昏暗的時候。", sentences: ["漫步在海灘欣賞_______景色。", "黃昏時分，夕陽把天空染成金黃色。", "農夫在黃昏時收工回家。", "黃昏的晚霞美不勝收。", "夕陽西下，黃昏景色迷人。"] },
+                    { word: "溫暖", definition: "稍微溫熱，比喻關懷體貼。", sentences: ["羊毛衣穿在身上十分_______。", "社會各界送來了_______的愛心捐款。", "陽光照耀大地，令人感到_______。", "校園裏充滿了師生間的_______情誼。", "一杯熱茶驅走了冬日的寒冷。"] },
+                    { word: "寒冷", definition: "氣溫低，感覺冷。", sentences: ["冬天的北風吹來，感到十分_______。", "寒冷天氣下要加穿厚外套。", "候鳥飛往南方過冬以避開_______。", "雪山山頂終年冰雪覆蓋，氣候_______。", "寒冷深夜裏爐火帶來一絲暖意。"] },
+                    { word: "精彩", definition: "表演、節目等出色、美妙。", sentences: ["魔術表演十分_______，觀眾拍爛手掌。", "這場足球賽過程緊張且_______。", "文藝匯演的節目非常_______。", "馬戲團的演出贏得全場喝采。", "故事內容高潮迭起，十分_______。"] },
+                    { word: "熱烈", definition: "情緒高昂、興奮、活躍。", sentences: ["台下響起_______的掌聲。", "大家熱烈討論這個有趣的課題。", "慶祝活動氣氛_______。", "全場觀眾以_______歡迎嘉賓進場。", "討論會上發言十分_______。"] },
+                    { word: "仔細", definition: "周密、不粗心、細緻。", sentences: ["警察仔細檢查現場的蛛絲馬跡。", "做試卷時要仔細審題。", "媽媽仔細縫補破了的衣服。", "請仔細閱讀說明書後才使用。", "他做事一向謹慎仔細。"] },
+                    { word: "開心", definition: "心情愉快舒適。", sentences: ["今天收到生日禮物，我感到十分開心。", "和小朋友們一起玩遊戲真開心。", "全家人去旅行大家都好開心。", "祝大家每天都開開心心。", "笑口常開讓人更開心。"] },
+                    { word: "高興", definition: "愉快而興奮。", sentences: ["得知考試取得好成績，大家都很高興。", "爸爸答應帶我去主題樂園，我高興得跳起來。", "朋友來訪令主人家感到高興。", "喜訊傳來，舉國高興。", "老師表揚了我，心裏真高興。"] },
+                    { word: "激動", definition: "感情因受刺激而衝動、興奮。", sentences: ["運動員奪得金牌時情緒十分激動。", "聽到感人的故事，她激動得流下眼淚。", "全場觀眾為精彩的絕殺球激動歡呼。", "重逢的時刻大家都激動不已。", "心情激動得久久不能平靜。"] },
+                    { word: "感動", definition: "思想受外界影響而動心、思索、哀悅。", sentences: ["這個慈善故事深深感動了無數讀者。", "義工無私奉獻的精神令人感動。", "收到親手製作的卡片十分感動。", "淚水包含了感激與感動。", "真摯的友誼最能感動人心。"] },
+                    { word: "感激", definition: "感謝的心情。", sentences: ["心中充滿對恩師的感激之情。", "受人滴水之恩，當湧泉感激。", "他對伸出援手的陌生人表達感激。", "感激大家這段時間的陪伴與支援。", "無言感激盡在不言中。"] },
+                    { word: "讚賞", definition: "稱讚、嘉許。", sentences: ["校長讚賞義工同學的傑出表現。", "作品獲得評判一致讚賞。", "獲得老師的讚賞令人鼓舞。", "父母讚賞他懂事聽話。", "市民讚賞警員迅速破案。"] },
+                    { word: "誇獎", definition: "稱讚、美言。", sentences: ["長輩誇獎他謙虛有禮。", "不要因為一點誇獎而驕傲。", "老師誇獎班長工作負責。", "鄰居誇獎妹妹乖巧伶俐。", "獲得誇獎後要繼續努力。"] },
+                    { word: "鼓勵", definition: "激發勇氣，使人振作。", sentences: ["老師用溫柔的話語鼓勵挫敗的學生。", "父母的鼓勵是我前進的動力。", "互相鼓勵有助克服難關。", "教練鼓勵隊員不到最後決不放棄。", "掌聲是對表演者最好的鼓勵。"] },
+                    { word: "支持", definition: "給予協助與鼓勵。", sentences: ["感謝家人一直以來的支持與信任。", "全班同學支持代表參賽。", "環保活動需要市民大力支持。", "互相支持共同度過難關。", "政策出台獲得民眾支持。"] },
+                    { word: "協助", definition: "從旁幫忙、輔助。", sentences: ["警察在場協助維持秩序。", "秘書協助經理處理公務。", "感謝大家協助籌辦活動。", "義工協助派發物資。", "技術人員協助修復系統。"] },
+                    { word: "合作", definition: "共同工作、互相配合。", sentences: ["團隊合作是贏得比賽的關鍵。", "兩間公司合作開發新項目。", "小組成員互相合作完成壁報。", "愉快合作帶來高效成果。", "國際社會需要緊密合作。"] },
+                    { word: "和諧", definition: "和睦融洽、協調。", sentences: ["社區鄰里關係和諧共處。", "人與自然和諧共生。", "校園生活愉快且充滿和諧氣氛。", "家庭和諧是幸福的泉源。", "促進社會穩定與民族和諧。"] },
+                    { word: "和平", definition: "沒有戰爭、安寧的狀態。", sentences: ["世界和平是全人類的共同願望。", "愛好和平反對戰爭。", "祈求世界永遠充滿和平與愛。", "和平相處共謀發展。", "簽署和平協議。"] },
+                    { word: "探索", definition: "多方尋求答案。", sentences: ["我們要勇於探索科學奧祕。", "太空人探索浩瀚宇宙。", "探索大自然的奇妙規律。"] },
+                    { word: "堅定", definition: "立場堅強不移。", sentences: ["我們要堅定理想信念。", "他以堅定的步伐向前邁進。", "面對困難態度十分堅定。"] },
+                    { word: "勤勞", definition: "努力工作，不怕辛苦。", sentences: ["農夫每日辛勤耕作十分勤勞。", "勤勞的人民創造美好生活。", "我們要養成勤勞的美德。"] },
+                    { word: "謙虛", definition: "不自滿，虛心接受意見。", sentences: ["取得好成績也要保持謙虛。", "他待人謙虛有禮，受人尊敬。", "謙虛使人進步，驕傲使人落後。"] },
+                    { word: "機智", definition: "反應敏捷，謀略出眾。", sentences: ["小英雄機智地擺脫了壞人。", "面對突發狀況展現了機智。", "他頭腦靈活，十分機智。"] },
+                    { word: "冷靜", definition: "不慌亂，鎮定沉着。", sentences: ["發生火警時要保持冷靜。", "她冷靜地分析問題並解決。", "冷靜思考有助做出正確判斷。"] },
+                    { word: "熱烈", definition: "情緒高漲活躍。", sentences: ["台下響起熱烈的掌聲。", "大家熱烈討論新方案。", "慶祝晚會氣氛熱烈。"] },
+                    { word: "仔細", definition: "周密不馬虎。", sentences: ["請仔細檢查試卷答案。", "媽媽仔細叮囑出門注意事項。", "他做事向來認真仔細。"] },
+                    { word: "認真", definition: "嚴肅不苟不馬虎。", sentences: ["學習態度必須認真。", "運動員認真進行日常訓練。", "她認真完成每一項功課。"] }
+                ],
+                idiom: [
+                    { word: "一心一意", definition: "形容心思專一，沒有二心。", sentences: ["哥哥_______地溫習，準備明天的呈分試。", "我們做任何事都要_______，不能三心兩意。", "運動員_______地訓練，希望爭取佳績。", "媽媽_______照顧生病的弟弟。", "只有_______，才能把手頭的工作做好。"] },
+                    { word: "人山人海", definition: "形容聚集的人非常多，熱鬧非凡。", sentences: ["維園花市擠得_______，熱鬧極了。", "假日的主題樂園排隊處_______。", "演唱會門票開售，售票處外_______。", "球賽現場座無虛席，_______。", "中秋晚會的廣場上_______。"] },
+                    { word: "三心兩意", definition: "意志不堅定，猶豫不決。", sentences: ["做事不能_______，否則一事無成。", "選購文具時不要_______，看準了就買。", "他在升學抉擇時_______，不知如何是好。", "學習最忌諱_______，要有始有終。", "弟弟做功課時_______，結果拖了很久。"] },
+                    { word: "十全十美", definition: "完美無缺，各方面都非常圓滿。", sentences: ["世事往往難以_______，我們要學會包容。", "這幅畫雖然有些小瑕疵，但已相當_______。", "世界上沒有_______的人，每人都有缺點。", "演出非常成功，幾乎可說是_______。", "精益求精不等於追求_______。"] },
+                    { word: "手忙腳亂", definition: "形容做事慌亂，沒有條理。", sentences: ["突然停電時，大家在一片漆黑中_______。", "媽媽同時處理家務時弄得_______。", "臨急抱佛腳溫習，令他在試場內_______。", "上學快遲到時，我急得_______。", "熟練之後，操作機器便不會_______。"] },
+                    { word: "不屈不撓", definition: "在困難和壓力面前不屈服、不低頭。", sentences: ["英雄人物在逆境中_______，值得學習。", "中華民族面對挑戰展現了_______的精神。", "運動員在落後時依然_______地追趕。", "面對失敗要有_______的毅力。", "科學家面對挫折表現得_______。"] },
+                    { word: "同心協力", definition: "團結一致，共同努力。", sentences: ["全班同學_______，贏得壁報比賽冠軍。", "抗擊疫情需要社會各界_______。", "拔河比賽中大家_______，奮力一拉。", "只要大家_______，就沒有克服不了的難關。", "救災工作在各方_______下順利展開。"] },
+                    { word: "水滴石穿", definition: "比喻只要堅持不懈，微小力量也能成大事。", sentences: ["學習外語正如_______，貴乎持之以恆。", "只要有_______的毅力，世上無難事。", "鐵杵成針的道理告訴我們_______的珍貴。", "憑着_______的精神，他終於攻克了博士學位。", "成功往往來自_______的日積月累。"] },
+                    { word: "循序漸進", definition: "按一定的順序、步驟逐漸進步。", sentences: ["學習知識必須_______，不能好高騖遠。", "老師指導我們做實驗時要_______地進行。", "這本教材編排科學，深淺_______。", "練琴也要_______，每天進步一點點。", "體能訓練必須_______，以免受傷。"] },
+                    { word: "實事求是", definition: "從實際出發，講求科學態度與客觀真相。", sentences: ["做學問必須秉持_______的態度。", "調查報告必須客觀中立、_______。", "他處事作風一向_______，深得上司信賴。", "科學實驗需要_______的精確精神。", "面對問題我們要_______地去分析解決。"] },
+                    { word: "全神貫注", definition: "全副精神集中在一起。", sentences: ["同學們_______地耹聽老師講解科學原理。", "他_______地組裝機械模型。", "考試時必須_______，以免粗心失分。", "畫家_______地創作巨幅油畫。", "雕刻師傅_______地雕琢木器。"] },
+                    { word: "刻苦耐勞", definition: "生活勤奮，經受得起艱苦。", sentences: ["老一輩香港人_______，建立美好家園。", "農夫日出而作，生活_______。", "他有_______的精神，從不抱怨工作辛苦。", "學徒期間雖然辛苦，但他_______。", "體育訓練十分艱辛，運動員_______。"] },
+                    { word: "自相矛盾", definition: "比喻言行前後不一致，互相抵觸。", sentences: ["你的說話前後_______，令人難以信服。", "這種說法_______，根本站不住腳。", "辯論時切忌露出_______的漏洞。", "他的一番言論充滿了_______。", "行為與口號_______，遭到質疑。"] },
+                    { word: "百折不撓", definition: "意志堅強，經歷無數挫折決不屈服。", sentences: ["發明家憑着_______的精神終於成功研發。", "探索宇宙的道路上需要_______的毅力。", "革命先烈_______，為理想奮鬥到底。", "面對重重難關，我們要有_______的信念。", "運動員憑着_______的鬥志反敗為勝。"] },
+                    { word: "意味深長", definition: "含意深遠，耐人尋味。", sentences: ["老師這番話_______，令我獲益良多。", "小說的結局_______，令人回味無窮。", "這幅寓言畫作寓意_______。", "校長在畢業典禮上發表了_______的演講。", "爺爺的微笑包含了_______的寄望。"] }
+                ]
+            },
+            6: {
+                vocab: [
+                    { word: "堅持", definition: "意志堅強，不輕易放棄。", sentences: ["只要我們_______不懈，終會達成目標。", "馬拉松運動員憑着頑強毅力_______到終點。", "學習外語需要長期_______的累積。", "面對重重困難，我們必須_______到底。", "科研人員多年來_______不懈地進行實驗。"] },
+                    { word: "繁華", definition: "城鎮集市工商業興旺、熱鬧景象。", sentences: ["香港是一個國際化且_______的大都市。", "入夜後，尖沙咀街頭燈光璀璨，十分_______。", "昔日的小漁村如今已發展成_______的商業中心。", "繁華鬧市中也有一片寧靜的公園。", "遊客們被這座城市的_______景象深深吸引。"] },
+                    { word: "嚴格", definition: "要求嚴厲、合乎規矩、不放鬆。", sentences: ["王老師對我們的功課要求十分_______。", "教練對體操運動員的訓練非常_______。", "學校制定了_______的校規來維護秩序。", "爸爸管教孩子雖然_______但充滿關愛。", "食品安全檢驗的標準一向十分_______。"] },
+                    { word: "欣賞", definition: "享受並領略其中的美妙，或給予高度評價。", sentences: ["我們坐在草地上_______滿天繁星。", "藝術評論家_______這幅畫作的獨特風格。", "互相_______是建立良好人際關係的基石。", "夕陽西下，遊人駐足_______這片海景。", "老師鼓勵同學多閱讀並學會_______文學之美。"] },
+                    { word: "慷慨", definition: "性格豪爽，大方，不吝嗇錢財或幫助。", sentences: ["這位善長仁翁_______捐款支持災區重建。", "朋友有困難時，他總是伸出援手，十分_______。", "大自然_______地向人類餽贈了寶貴資源。", "哥哥把心愛的藏書_______地借給同學。", "他的_______行為贏得了眾人的尊敬。"] },
+                    { word: "探索", definition: "多方尋求答案、研究未知事物。", sentences: ["人類不斷_______宇宙的奧祕。", "科學家深入深海_______未知的生物。", "考古學家在古墓中_______歷史真相。", "好奇心驅使我去_______大自然。", "教育旨在啟發學生自主_______知識。"] },
+                    { word: "謀略", definition: "計謀與策略。", sentences: ["這場棋局考驗雙方的_______與智慧。", "歷史人物足智多謀，擁有出色的_______。", "商場如戰場，企業發展需要長遠_______。", "他憑着卓越的_______化解了危機。", "將領運籌帷幄，展現精湛_______。"] },
+                    { word: "沉着", definition: "面對危急情況鎮定不慌亂。", sentences: ["面對突發火警，她依然保持_______。", "消防隊長_______地指揮救援行動。", "棋手在落後時表現得十分_______。", "遇到危機切忌慌張，必須冷靜_______。", "他處變不驚，神態_______。"] },
+                    { word: "敏捷", definition: "動作或思維靈敏迅速。", sentences: ["這隻小貓身手_______，一下子爬上樹。", "辯論員思維_______，迅速反駁對方。", "守門員反應_______，撲出險球。", "武術運動員動作流暢且_______。", "獵豹奔跑速度極快且身形_______。"] },
+                    { word: "開導", definition: "開導疏導，使其想通。", sentences: ["老師耐心地_______情緒低落的學生。", "朋友的一番話_______了我的心結。", "父母用溫和的方式_______孩子。", "經過心理學家的_______，他重拾信心。", "學會自我調節與互相_______。"] },
+                    { word: "振奮", definition: "使精神抖洠，情緒高昂。", sentences: ["這場勝利極大地_______了全隊的士氣。", "激昂的樂曲令人精神_______。", "聽到好消息後大家為之_______。", "教練的講話_______人心。", "清晨的咖啡讓人元氣_______。"] },
+                    { word: "繁重", definition: "工作或任務繁多沉重。", sentences: ["面對_______的呈分試複習，我們要作好時間管理。", "醫護人員肩負_______的救治任務。", "爸爸每天工作_______，十分辛苦。", "減輕學生的功課負擔與_______課業。", "科研工作任務_______。"] },
+                    { word: "廣闊", definition: "面積廣大，空間寬敞。", sentences: ["飛鳥翱翔在_______的天空。", "農場擁有_______的草原。", "知識的海洋浩瀚而_______。", "站在峰頂俯瞰_______大地。", "青年人有_______的發展空間。"] },
+                    { word: "浩瀚", definition: "水勢盛大，或形容數量極多、廣大。", sentences: ["漫步在_______的沙漠中倍感渺小。", "圖書館藏書_______，如海一般深廣。", "宇宙星空_______無垠。", "歷史長河_______奔騰。", "浩瀚的太平洋波瀾壯闊。"] },
+                    { word: "深奧", definition: "道理高深，不易理解。", sentences: ["這本哲學書的內容十分_______。", "老師深入淺出地講解_______的科學原理。", "古文之中往往蘊含_______的哲理。", "面對_______的難題，大家共同探討。", "理論看似_______，實則源於生活。"] },
+                    { word: "精湛", definition: "技藝高超，學問精深。", sentences: ["工匠的雕刻手藝十分_______。", "鋼琴家的演奏技巧_______，贏得喝采。", "醫生憑着_______的醫術治癒病人。", "這部電影的特效製作相當_______。", "廚師烹調出_______美味的佳餚。"] },
+                    { word: "卓越", definition: "傑出，超出一般。", sentences: ["他在科學研究領域取得了_______的成就。", "公司表揚了幾位表現_______的員工。", "這座城市擁有_______的交通網絡。", "學校培養出無數_______的人才。", "她的領導才能備受各界讚賞。"] },
+                    { word: "崇高", definition: "精神、品格等高尚博大，令人敬仰。", sentences: ["消防員捨己救人的_______情操令人敬佩。", "教育事業是一項偉大而_______的工作。", "革命先烈懷抱_______的愛國理想。", "我們向默默奉獻的志願者致以_______敬意。", "追求真理是人類_______的目標。"] },
+                    { word: "偉大", definition: "才華出眾、事業宏偉或品格崇高。", sentences: ["母愛是世上最_______的力量。", "科學家為人類文明作出了_______貢獻。", "長城是古代勞動人民創造的_______奇蹟。", "這是一個_______的歷史時刻。", "歷史上許多_______人物影響深遠。"] },
+                    { word: "壯麗", definition: "壯觀美麗。", sentences: ["日出時分的黃山雲海景色無比_______。", "祖國的山河壯麗_______。", "交響樂章氣勢磅礴且_______。", "宏偉的宮殿建築群顯得十分_______。", "晚霞映照下的海面波光粼粼，十分_______。"] },
+                    { word: "宏偉", definition: "規模宏大雄偉。", sentences: ["三峽大壩工程規模_______。", "這座宏偉的教堂歷史悠久。", "故宮建築群氣勢_______。", "城市規劃藍圖宏偉遠大。", "宏偉的立交橋四通八達。"] },
+                    { word: "奇妙", definition: "神妙莫測，令人驚嘆。", sentences: ["大自然充滿了各種_______的生物。", "這本書帶領讀者進入_______的童話世界。", "科學實驗的變化過程十分_______。", "雙胞胎之間有種_______的心靈感應。", "魔術表演展現了_______的幻覺。"] },
+                    { word: "神祕", definition: "神祕莫測，不為人知。", sentences: ["深海世界依然充滿了_______的色彩。", "古老的金字塔隱藏着無數_______。", "神祕的宇宙吸引無數天文學家探索。", "森林深處有一間_______的小木屋。", "這封信的寄件人身份十分_______。"] },
+                    { word: "幽靜", definition: "幽雅安靜。", sentences: ["山間小路幽靜而清涼。", "圖書館角落環境幽靜適合溫習。", "這座古老庭院古樸而幽靜。", "清晨的校園顯得格外幽靜。", "尋找一處幽靜的地方放鬆身心。"] },
+                    { word: "喧鬧", definition: "聲音大而雜亂，吵鬧。", sentences: ["繁華市中心車水馬龍，十分喧鬧。", "節日的夜市人聲鼎沸，好不喧鬧。", "課室裏突然喧鬧起來。", "遠離城市的喧鬧享受鄉村寧靜。", "喧鬧的街頭漸漸歸於平靜。"] },
+                    { word: "荒涼", definition: "人跡稀少，地勢荒蕪冷清。", sentences: ["戈壁沙漠一片荒涼。", "荒涼的山谷在夜色中更顯孤寂。", "荒涼的土地經開墾後變成良田。", "遠古遗址顯得十分荒涼。", "荒涼的荒島上偶有海鳥飛過。"] },
+                    { word: "繁榮", definition: "興旺發達，昌盛。", sentences: ["祝願國家繁榮昌盛，國泰民安。", "經濟繁榮帶動了商業發展。", "文化交流促進了社會繁榮。", "這裏是商貿繁榮的港口。", "海峽兩岸經濟共同繁榮。"] },
+                    { word: "衰退", definition: "由強盛轉向微弱，倒退。", sentences: ["由於經營不善，業務逐漸衰退。", "年紀漸長，記憶力難免有些衰退。", "經濟週期波動導致部分行業衰退。", "採取措施防止生態環境衰退。", "肌肉力量在缺乏運動時會衰退。"] },
+                    { word: "興旺", definition: "蓬勃發展，繁榮昌盛。", sentences: ["這條商業街生意興旺，客源不斷。", "家族人丁興旺，代代人才輩出。", "祝新店開業大吉，業務興旺。", "文化事業蒸蒸日上，十分興旺。", "村落因旅遊業發展而興旺。"] },
+                    { word: "寬容", definition: "氣量大，原諒或不計較他人過失。", sentences: ["我們要以寬容的心態對待別人的無心之失。", "老師寬容地原諒了犯錯的同學。", "社會需要更多的包容與寬容。", "寬容大度是美德。", "以寬容化解矛盾。"] },
+                    { word: "嚴厲", definition: "嚴格不寬容。", sentences: ["法官對違法行為作出嚴厲懲處。", "爸爸用嚴厲的語氣訓斥了說謊的弟弟。", "學校對欺凌行為採取嚴厲措施。", "嚴厲的批評使他意識到錯誤。", "教練給予違紀球員嚴厲處分。"] },
+                    { word: "慈祥", definition: "（老年人的態度）溫和安詳。", sentences: ["慈祥的奶奶臉上總是帶着溫暖的笑容。", "老校長目光慈祥地看着畢業生。", "慈祥的眼神給予孫兒無限關愛。", "慈祥的爺爺經常講述過去的故事。", "社區裏的老人慈祥而友善。"] },
+                    { word: "嚴肅", definition: "神情、氣氛莊重認真不輕鬆。", sentences: ["警察叔叔神情嚴肅地調查案件。", "開會時氣氛嚴肅。", "爸爸對待紀律問題態度十分嚴肅。", "嚴肅的表情令人不敢馬虎。", "校規面前必須嚴肅對待。"] },
+                    { word: "和藹", definition: "態度溫和，容易接近。", sentences: ["王醫生待人十分和藹，深受病人喜愛。", "慈祥和藹的伯伯送我糖果。", "老師語調和藹可親。", "和藹的笑容拉近了人與人之間的距離。", "圖書館員態度和藹可親。"] },
+                    { word: "和氣", definition: "態度平心靜氣，不爭執。", sentences: ["做生意以和氣生財最重要。", "鄰里之間要和氣相處。", "雖然意見不同，但大家依然和氣討論。", "和氣待人贏得好人緣。", "保持和氣避免傷和氣。"] },
+                    { word: "粗暴", definition: "脾氣暴躁，行事不講道理。", sentences: ["處理問題不能態度粗暴。", "粗暴的行為無法解決糾紛。", "切忌用粗暴言語傷害他人。", "他一時衝動表現得十分粗暴。", "文明溝通反對粗暴。"] },
+                    { word: "粗心", definition: "不細心，馬虎大意。", sentences: ["考試時因為粗心寫錯了單位。", "做事粗心大意容易出錯。", "提醒自己細心檢查，不要再粗心。", "粗心是導致失敗的主要原因。", "粗心大意使他失分不少。"] },
+                    { word: "細心", definition: "用心周密，不馬虎。", sentences: ["護士細心地為病人量血溫。", "細心觀察生活中的科學細節。", "做實驗時步驟要十分細心。", "感謝媽媽細心的照顧。", "細心審題是拿高分的秘訣。"] },
+                    { word: "謹慎", definition: "對言行審慎小心，免生禍患。", sentences: ["過馬路時要格外謹慎周圍交通。", "投資理財必須謹慎行事。", "他在處理機密文件時十分謹慎。", "謹慎駕駛確保道路安全。", "謹慎言行避免誤會。"] },
+                    { word: "魯莽", definition: "言語行動輕率，不加思考。", sentences: ["遇事切忌衝動魯莽。", "魯莽的決定往往帶來嚴重後果。", "他因一時魯莽而闖下了大禍。", "做事不能魯莽，要深謀遠慮。", "批評他做事太過魯莽。"] },
+                    { word: "果斷", definition: "決斷不猶豫。", sentences: ["隊長在危急關頭果斷下達指令。", "老闆作風果斷，迅速抓住商機。", "消防員果斷破門救人。", "果斷的抉擇避免了更大損失。", "遇到緊急情況必須果斷處理。"] },
+                    { word: "猶豫", definition: "拿不定主意，遲疑不決。", sentences: ["她在選購禮物時猶豫不決。", "面對機遇不要猶豫，要勇敢把握。", "他猶豫了一下還是答應了請求。", "做事果斷切忌過分猶豫。", "猶豫不決往往錯失良機。"] },
+                    { word: "果決", definition: "決斷堅決不拖延。", sentences: ["領導層果決地批準了改革方案。", "他做事果決，從不拖泥帶水。", "果決的態度贏得下屬信任。", "面對危機要有果決的勇氣。", "果決行動解決了難題。"] },
+                    { word: "堅決", definition: "態度堅定，毫不動搖。", sentences: ["我們堅決反對任何形式的校園欺凌。", "哥哥堅決要參軍保衛國家。", "老師堅決制止了不當行為。", "堅決完成上級交代的任務。", "意志堅決克服一切難關。"] },
+                    { word: "動搖", definition: "意志不堅定，發生變化。", sentences: ["面對誘惑，他的意志開始動搖。", "堅定的信念絕不輕易動搖。", "謠言動搖了大家的信心。", "形勢變化沒有動搖我們的決心。", "切勿輕易動搖原則。"] },
+                    { word: "執着", definition: "對某事堅持不放，近乎固執。", sentences: ["他對科學真理有着執着的追求。", "藝術家對創作有着執着的熱愛。", "有時候適當堅持，有時候不要太執着。", "執着的信念支撐他走到今天。", "執着於夢想終會發光。"] },
+                    { word: "頑強", definition: "強硬不屈，堅韌不拔。", sentences: ["守門員頑強地撲出對方的多次射門。", "抗洪戰士展現了頑強的鬥志。", "病人憑着頑強的毅力戰勝病魔。", "頑強的生命力令人敬佩。", "在逆境中保持頑強精神。"] }
+                ]
+            }
+        };
+
+        const petCheers = {
+            "🐶": ["汪！主人加油！", "汪汪！你是最棒的！", "汪！咬緊牙關衝呀！"],
+            "🐰": ["蹦蹦跳！順利通關！", "兔兔陪你一起加油！", "太棒了，繼續保持！"],
+            "🐱": ["喵~ 聰明的主人！", "喵嗚~ 輕鬆答對！", "喵！勝利在望！"],
+            "🐻": ["熊掌拍拍，加油！", "熊熊為你打氣！", "穩紮穩打一定行！"]
+        };
+
+        // --- Initialization & Event Listeners ---
+        window.addEventListener('DOMContentLoaded', () => {
+            loadUserData();
+            loadMistakes();
+            renderLeaderboards();
+            bindEventListeners();
+        });
+
+        function bindEventListeners() {
+            const getEl = id => document.getElementById(id);
+
+            if (getEl('btn-p3')) getEl('btn-p3').onclick = () => startGameSetup(3);
+            if (getEl('btn-p6')) getEl('btn-p6').onclick = () => startGameSetup(6);
+
+            if (getEl('btn-mistakes')) getEl('btn-mistakes').onclick = openMistakeModal;
+            if (getEl('btn-home')) getEl('btn-home').onclick = returnToHome;
+            if (getEl('btn-stage-home')) getEl('btn-stage-home').onclick = returnToHome;
+            if (getEl('btn-gameover-home')) getEl('btn-gameover-home').onclick = returnToHome;
+
+            if (getEl('btn-vocab-choice')) getEl('btn-vocab-choice').onclick = () => launchQuiz('vocab', 'choice');
+            if (getEl('btn-vocab-fill')) getEl('btn-vocab-fill').onclick = () => launchQuiz('vocab', 'fill');
+            if (getEl('btn-idiom-choice')) getEl('btn-idiom-choice').onclick = () => launchQuiz('idiom', 'choice');
+            if (getEl('btn-idiom-fill')) getEl('btn-idiom-fill').onclick = () => launchQuiz('idiom', 'fill');
+
+            if (getEl('btn-submit-fill')) getEl('btn-submit-fill').onclick = submitFillAnswer;
+            if (getEl('btn-next-q')) getEl('btn-next-q').onclick = nextQuestion;
+            if (getEl('btn-resume-quiz')) getEl('btn-resume-quiz').onclick = resumeQuiz;
+            if (getEl('btn-restart-quiz')) getEl('btn-restart-quiz').onclick = restartSameQuiz;
+
+            if (getEl('btn-close-mistake')) getEl('btn-close-mistake').onclick = closeMistakeModal;
+            if (getEl('btn-export-mistakes')) getEl('btn-export-mistakes').onclick = exportMistakeNotebook;
+            if (getEl('btn-clear-mistakes')) getEl('btn-clear-mistakes').onclick = clearMistakeNotebook;
+
+            const fillInput = getEl('fill-answer-input');
+            if (fillInput) {
+                fillInput.onkeydown = (e) => {
+                    if (e.key === 'Enter') submitFillAnswer();
+                };
+            }
         }
 
-        const STRICT_VOCAB_DB = {
-            P3: [
-                { id: "p3_1", word: "休息", type: "詞語", def: "暫停工作或活動，使身體得到鬆弛。" },
-                { id: "p3_2", word: "焦急", type: "詞語", def: "心急如焚，非常焦慮。" },
-                { id: "p3_3", word: "安慰", type: "詞語", def: "用溫和的話語撫慰對方。" },
-                { id: "p3_4", word: "難過", type: "詞語", def: "心裏悲傷、痛苦。" },
-                { id: "p3_5", word: "失業", type: "詞語", def: "失去工作。" },
-                { id: "p3_6", word: "慚愧", type: "詞語", def: "因做錯事而感到羞愧不安。" },
-                { id: "p3_7", word: "幫助", type: "詞語", def: "給予支援與協助。" },
-                { id: "p3_8", word: "一窩蜂", type: "詞語", def: "許多人同時蜂擁而至。" },
-                { id: "p3_9", word: "口袋", type: "詞語", def: "衣服上的袋子。" },
-                { id: "p3_10", word: "哽咽", type: "詞語", def: "哭泣時喉嚨阻塞發不出聲。" },
-                { id: "p3_11", word: "面紅耳赤", type: "成語", def: "因急躁或爭執而臉紅耳朵紅。" },
-                { id: "p3_12", word: "喜上眉梢", type: "成語", def: "喜悅神情顯露在眉宇間。" },
-                { id: "p3_13", word: "溫暖", type: "詞語", def: "氣候溫和舒適或感受關懷。" },
-                { id: "p3_14", word: "恰巧", type: "詞語", def: "湊巧、正好。" },
-                { id: "p3_15", word: "興高采烈", type: "成語", def: "興致高昂，情緒熱烈。" },
-                { id: "p3_16", word: "思考", type: "詞語", def: "深入推想與分析。" },
-                { id: "p3_17", word: "失望", type: "詞語", def: "希望落空，感到沮喪。" },
-                { id: "p3_18", word: "受傷", type: "詞語", def: "身體或心靈受到創傷。" },
-                { id: "p3_19", word: "垂頭喪氣", type: "成語", def: "低著頭神情沮喪。" },
-                { id: "p3_20", word: "暢快", type: "詞語", def: "舒暢快樂，盡情無阻。" },
-                { id: "p3_21", word: "默不作聲", type: "成語", def: "保持沉默，不發一言。" },
-                { id: "p3_22", word: "包紮", type: "詞語", def: "用繃帶包裹傷口。" },
-                { id: "p3_23", word: "愛理不理", type: "成語", def: "態度冷淡，不願理睬。" },
-                { id: "p3_24", word: "貪玩", type: "詞語", def: "沉迷玩樂。" },
-                { id: "p3_25", word: "浮現", type: "詞語", def: "顯露、呈現出來。" },
-                { id: "p3_26", word: "往事", type: "詞語", def: "過去的事情。" },
-                { id: "p3_27", word: "親密", type: "詞語", def: "感情深厚，關係密切。" },
-                { id: "p3_28", word: "傾談", type: "詞語", def: "暢所欲言地談心。" },
-                { id: "p3_29", word: "好奇", type: "詞語", def: "對新奇事物充滿興趣。" },
-                { id: "p3_30", word: "腦海", type: "詞語", def: "記憶深處。" },
-                { id: "p3_31", word: "歡樂", type: "詞語", def: "快樂歡喜。" },
-                { id: "p3_32", word: "懂事", type: "詞語", def: "明事理，懂得情理。" },
-                { id: "p3_33", word: "空閒", type: "詞語", def: "清閒無事。" },
-                { id: "p3_34", word: "幸福", type: "詞語", def: "生活美滿順利。" },
-                { id: "p3_35", word: "忙碌", type: "詞語", def: "事情多，不得空閒。" },
-                { id: "p3_36", word: "不知不覺", type: "成語", def: "沒有察覺到，未曾意識到。" },
-                { id: "p3_37", word: "過世", type: "詞語", def: "去世、死亡。" },
-                { id: "p3_38", word: "特別", type: "詞語", def: "與眾不同，格外的。" },
-                { id: "p3_39", word: "粗糙", type: "詞語", def: "不精細、不光滑。" },
-                { id: "p3_40", word: "淚花", type: "詞語", def: "眼中含著的淚水。" },
-                { id: "p3_41", word: "親切", type: "詞語", def: "熱情關切，態度和藹。" },
-                { id: "p3_42", word: "變化", type: "詞語", def: "事物改變，產生差異。" },
-                { id: "p3_43", word: "冰冷", type: "詞語", def: "極其寒冷。" },
-                { id: "p3_44", word: "實在", type: "詞語", def: "確確實實。" },
-                { id: "p3_45", word: "撲向", type: "詞語", def: "猛力衝向目標。" },
-                { id: "p3_46", word: "減輕", type: "詞語", def: "降低程度或重量。" },
-                { id: "p3_47", word: "代表", type: "詞語", def: "象徵或替個人做事。" },
-                { id: "p3_48", word: "辛勞", type: "詞語", def: "辛苦勞累。" },
-                { id: "p3_49", word: "用功", type: "詞語", def: "努力學習。" },
-                { id: "p3_50", word: "報答", type: "詞語", def: "回報恩惠。" },
-                { id: "p3_c1", word: "大開眼界", type: "成語", def: "增加見識，開擴視野。" },
-                { id: "p3_c2", word: "五光十色", type: "成語", def: "色彩鮮艷多元。" },
-                { id: "p3_c3", word: "風平浪靜", type: "成語", def: "沒有風浪，水面平靜。" },
-                { id: "p3_c4", word: "賞心樂事", type: "成語", def: "歡喜快樂的事情。" },
-                { id: "p3_c5", word: "舉世聞名", type: "成語", def: "全世界都知道其名聲。" },
-                { id: "p3_c6", word: "千叮萬囑", type: "成語", def: "再三叮嚀告誡。" },
-                { id: "p3_c7", word: "守口如瓶", type: "成語", def: "嚴守秘密，口風極緊。" },
-                { id: "p3_c8", word: "滔滔不絕", type: "成語", def: "說話連續不斷。" },
-                { id: "p3_c9", word: "暢所欲言", type: "成語", def: "盡情地表達想說的話。" },
-                { id: "p3_c10", word: "鴉雀無聲", type: "成語", def: "非常寂靜，無半點聲音。" },
-                { id: "p3_c11", word: "一本正經", type: "成語", def: "態度莊重嚴肅。" },
-                { id: "p3_c12", word: "東張西望", type: "成語", def: "四處張望，到處看。" },
-                { id: "p3_c13", word: "鬼鬼祟祟", type: "成語", def: "行為偷偷摸摸。" },
-                { id: "p3_c14", word: "專心致志", type: "成語", def: "集中全部注意力。" },
-                { id: "p3_c15", word: "嬉皮笑臉", type: "成語", def: "笑嘻嘻、不嚴肅的樣子。" }
-            ],
-            P6: [
-                { id: "p6_1", word: "競爭", type: "詞語", def: "互相角逐以勝過他人。" },
-                { id: "p6_2", word: "風塵僕僕", type: "成語", def: "形容長途奔波勞累。" },
-                { id: "p6_3", word: "風雨無阻", type: "成語", def: "不受風雨阻礙按時前往。" },
-                { id: "p6_4", word: "五花八門", type: "成語", def: "花樣繁多，變化莫測。" },
-                { id: "p6_5", word: "一言難盡", type: "成語", def: "事情複雜，難以一句講清。" },
-                { id: "p6_6", word: "本末倒置", type: "成語", def: "顛倒主次輕重。" },
-                { id: "p6_7", word: "日以繼夜", type: "成語", def: "夜以繼日不休息。" },
-                { id: "p6_8", word: "屢見不鮮", type: "成語", def: "經常見到，不再奇特。" },
-                { id: "p6_9", word: "盲目", type: "詞語", def: "缺乏主見隨波逐流。" },
-                { id: "p6_10", word: "糟糕", type: "詞語", def: "情況很壞或事情做壞了。" },
-                { id: "p6_11", word: "激烈", type: "詞語", def: "競爭或動作極其劇烈。" },
-                { id: "p6_12", word: "輔導", type: "詞語", def: "協助與指導學習。" },
-                { id: "p6_13", word: "委屈", type: "詞語", def: "受到不公正待遇而難過。" },
-                { id: "p6_14", word: "驚醒", type: "詞語", def: "因驚嚇而從睡夢醒來。" },
-                { id: "p6_15", word: "折磨", type: "詞語", def: "使人在身心遭受痛苦。" },
-                { id: "p6_16", word: "央求", type: "詞語", def: "懇切地請求。" },
-                { id: "p6_17", word: "發誓", type: "詞語", def: "莊嚴地立下誓言。" },
-                { id: "p6_18", word: "師傅", type: "詞語", def: "對有技藝工匠的尊稱。" },
-                { id: "p6_19", word: "坑坑窪窪", type: "成語", def: "地面高低不平有凹坑。" },
-                { id: "p6_20", word: "時髦", type: "詞語", def: "款式新穎符合潮流。" },
-                { id: "p6_21", word: "倒霉", type: "詞語", def: "遭遇不幸，運氣不好。" },
-                { id: "p6_22", word: "處置", type: "詞語", def: "處理、發落、安排。" },
-                { id: "p6_23", word: "熟練", type: "詞語", def: "對技術做得多而純熟。" },
-                { id: "p6_24", word: "優秀", type: "詞語", def: "品質成績突出卓越。" },
-                { id: "p6_25", word: "絞盡腦汁", type: "成語", def: "費盡腦筋極力思索。" },
-                { id: "p6_26", word: "空洞", type: "詞語", def: "內容貧乏無實質。" },
-                { id: "p6_27", word: "批評", type: "詞語", def: "指正錯誤與缺點。" },
-                { id: "p6_28", word: "探討", type: "詞語", def: "探索研討，深入分析。" },
-                { id: "p6_29", word: "長途跋涉", type: "成語", def: "路途遙遠，行旅艱辛。" },
-                { id: "p6_30", word: "荊棘", type: "詞語", def: "帶刺灌木，比喻困難阻礙。" },
-                { id: "p6_31", word: "構思", type: "詞語", def: "創作前進行醞釀設計。" },
-                { id: "p6_32", word: "靈感", type: "詞語", def: "創作中突如其來的創意。" },
-                { id: "p6_33", word: "搭建", type: "詞語", def: "組裝支架以構築建物。" },
-                { id: "p6_34", word: "言之有物", type: "成語", def: "文章說話內容充實有根據。" },
-                { id: "p6_35", word: "下筆成章", type: "成語", def: "文思敏捷一寫即成文章。" },
-                { id: "p6_36", word: "累積", type: "詞語", def: "層層聚積，逐步增加。" },
-                { id: "p6_37", word: "奧秘", type: "詞語", def: "深奧神奇的道理或秘密。" },
-                { id: "p6_38", word: "不懈", type: "詞語", def: "不鬆懈，堅持到底。" },
-                { id: "p6_39", word: "瞬息萬變", type: "成語", def: "極短時間發生極多變化。" },
-                { id: "p6_40", word: "相輔相成", type: "成語", def: "兩者互相輔助促成。" },
-                { id: "p6_41", word: "翱翔", type: "詞語", def: "在空中迴旋飛翔。" },
-                { id: "p6_42", word: "鑰匙", type: "詞語", def: "開鎖工具，比喻解決問題的關鍵。" },
-                { id: "p6_43", word: "無影無蹤", type: "成語", def: "消失乾淨，不留痕跡。" },
-                { id: "p6_44", word: "稀奇古怪", type: "成語", def: "極其奇特罕見怪異。" },
-                { id: "p6_45", word: "日新月異", type: "成語", def: "發展更新極快。" },
-                { id: "p6_46", word: "疑團", type: "詞語", def: "許多累積在一起的疑點。" },
-                { id: "p6_47", word: "穿梭", type: "詞語", def: "來往頻繁往返。" },
-                { id: "p6_48", word: "翹起", type: "詞語", def: "一端向上抬起。" },
-                { id: "p6_49", word: "無從入手", type: "成語", def: "沒有門徑去開始做某事。" },
-                { id: "p6_50", word: "仿照", type: "詞語", def: "模仿照樣去做。" },
-                { id: "p6_c1", word: "大煞風景", type: "成語", def: "破壞美好的興致景致。" },
-                { id: "p6_c2", word: "不勝枚舉", type: "成語", def: "數量太多，無法一一列舉。" },
-                { id: "p6_c3", word: "怨聲載道", type: "成語", def: "形容群眾普遍強烈不滿。" },
-                { id: "p6_c4", word: "排山倒海", type: "成語", def: "氣勢磅礴，聲勢浩大。" },
-                { id: "p6_c5", word: "絡繹不絕", type: "成語", def: "前後相連，往來不斷。" },
-                { id: "p6_c6", word: "口不擇言", type: "成語", def: "情急說話莽撞不加選擇。" },
-                { id: "p6_c7", word: "指桑罵槐", type: "成語", def: "拐彎抹角罵人。" },
-                { id: "p6_c8", word: "唇槍舌劍", type: "成語", def: "辯論言詞鋒利激烈。" },
-                { id: "p6_c9", word: "貽笑大方", type: "成語", def: "被內行/有識之士嘲笑。" },
-                { id: "p6_c10", word: "義正辭嚴", type: "成語", def: "道理正當，措詞嚴肅堅定。" },
-                { id: "p6_c11", word: "不寒而慄", type: "成語", def: "因恐懼而發抖。" },
-                { id: "p6_c12", word: "如坐針氈", type: "成語", def: "形容內心極度不安。" },
-                { id: "p6_c13", word: "受寵若驚", type: "成語", def: "得到意想未到的賞識而驚喜不安。" },
-                { id: "p6_c14", word: "萬念俱灰", type: "成語", def: "形容極度絕望。" },
-                { id: "p6_c15", word: "觸目驚心", type: "成語", def: "看見嚴重的景象感到震驚。" }
-            ]
-        };
+        function startGameSetup(grade) {
+            const nameInput = document.getElementById('player-name-input').value.trim();
+            if (nameInput) {
+                gameState.playerName = nameInput;
+            }
+            const selectedPet = document.querySelector('input[name="pet"]:checked');
+            if (selectedPet) {
+                gameState.pet = selectedPet.value;
+            }
+            gameState.grade = grade;
 
-        let state = {
-            playerName: "樂樂",
-            selectedPet: { id: "shiba", name: "柴柴", icon: "🐶" },
-            grade: "P3",
-            welcomeGrade: "P3",
-            quizMode: "mc",
-            quizCount: 15,
-            questions: [],
-            currentIdx: 0,
-            score: 0,
-            cumulativeScore: 0,
-            mistakes: [],
-            canvasCtx: null,
-            isDrawing: false
-        };
+            localStorage.setItem('adv_player_name', gameState.playerName);
+            localStorage.setItem('adv_player_pet', gameState.pet);
 
-        let historyWordIds = JSON.parse(localStorage.getItem('historyWordIds') || '[]');
-        let cumulativeScore = parseInt(localStorage.getItem('cumScore') || '0');
+            updatePetDisplay();
 
-        window.onload = function() {
-            initCanvas();
-            state.cumulativeScore = cumulativeScore;
-            updateRankUI();
-            renderParallelLeaderboards();
-        };
+            document.getElementById('welcome-modal').classList.add('hidden');
+            document.getElementById('main-app').classList.remove('hidden');
+            renderLeaderboards();
+        }
+
+        function updatePetDisplay() {
+            document.getElementById('header-greeting').innerText = `你好, ${gameState.playerName}! 準備溫習了嗎？✨`;
+            document.getElementById('header-subtitle').innerText = `級別：${gameState.grade}年級 | 萌寵：${gameState.pet} | 當前頭銜：${getRankTitle(0)}`;
+            document.getElementById('pet-avatar-display').innerText = gameState.pet;
+            document.getElementById('quiz-pet-icon').innerText = gameState.pet;
+            document.getElementById('stage-break-pet-icon').innerText = gameState.pet;
+            
+            const cheers = petCheers[gameState.pet] || ["加油！"];
+            const randomCheer = cheers[Math.floor(Math.random() * cheers.length)];
+            document.getElementById('quiz-pet-text').innerText = randomCheer;
+        }
+
+        function loadUserData() {
+            const savedName = localStorage.getItem('adv_player_name');
+            const savedPet = localStorage.getItem('adv_player_pet');
+            if (savedName) {
+                document.getElementById('player-name-input').value = savedName;
+                gameState.playerName = savedName;
+            }
+            if (savedPet) {
+                const radio = document.querySelector(`input[name="pet"][value="${savedPet}"]`);
+                if (radio) radio.checked = true;
+                gameState.pet = savedPet;
+            }
+            updatePetDisplay();
+        }
+
+        function returnToHome() {
+            document.getElementById('quiz-view').classList.add('hidden');
+            document.getElementById('feedback-modal').classList.add('hidden');
+            document.getElementById('stage-break-modal').classList.add('hidden');
+            document.getElementById('game-over-modal').classList.add('hidden');
+            document.getElementById('mistake-modal').classList.add('hidden');
+            document.getElementById('dashboard-view').classList.remove('hidden');
+            renderLeaderboards();
+        }
 
         function getRankTitle(score) {
-            let title = RANKS[0].title;
-            for (let r of RANKS) {
-                if (score >= r.minScore) title = r.title;
+            if (score >= 400) return "👑 語文一代宗師";
+            if (score >= 250) return "🎓 成語大師";
+            if (score >= 100) return "🌟 語文探險家";
+            return "🌱 詞語小萌新";
+        }
+
+        function getHistoryKey(grade, category) {
+            return `adv_history_g${grade}_${category}`;
+        }
+
+        function getRecentHistory(grade, category) {
+            try {
+                const historyStr = localStorage.getItem(getHistoryKey(grade, category));
+                return historyStr ? JSON.parse(historyStr) : [];
+            } catch (e) {
+                return [];
             }
-            return title;
         }
 
-        function updateRankUI() {
-            const currentTitle = getRankTitle(state.cumulativeScore);
-            document.getElementById('nav-score').innerText = state.cumulativeScore;
-            document.getElementById('nav-rank-badge').innerText = currentTitle;
-            document.getElementById('home-cum-score').innerText = state.cumulativeScore;
-            document.getElementById('home-rank-title').innerText = currentTitle;
+        function saveHistory(grade, category, runWords) {
+            const key = getHistoryKey(grade, category);
+            let history = getRecentHistory(grade, category);
+            history.unshift(runWords);
+            if (history.length > 5) {
+                history = history.slice(0, 5);
+            }
+            localStorage.setItem(key, JSON.stringify(history));
         }
 
-        function selectWelcomeGrade(g) {
-            state.welcomeGrade = g;
-            document.getElementById('welcome-btn-p3').classList.toggle('selected', g === 'P3');
-            document.getElementById('welcome-btn-p6').classList.toggle('selected', g === 'P6');
-        }
+        function launchQuiz(category, mode) {
+            gameState.category = category;
+            gameState.mode = mode;
+            gameState.currentIndex = 0;
+            gameState.score = 0;
 
-        function completeLogin() {
-            const name = document.getElementById('welcome-name-input').value.trim() || "樂樂";
-            state.playerName = name;
-            state.grade = state.welcomeGrade;
+            const rawPool = curriculumData[gameState.grade] && curriculumData[gameState.grade][category] 
+                ? curriculumData[gameState.grade][category] 
+                : [];
             
-            document.getElementById('nav-player-name').innerText = name;
-            document.getElementById('app-greeting-title').innerText = `你好，${name}！準備溫習了嗎？✨`;
-            document.getElementById('modal-welcome').classList.remove('active');
-        }
-
-        function selectPet(id, name, icon) {
-            state.selectedPet = { id, name, icon };
-            document.querySelectorAll('.pet-card').forEach(c => c.classList.remove('selected'));
-            event.currentTarget.classList.add('selected');
-            document.getElementById('nav-pet-icon').innerText = icon;
-        }
-
-        function goToGradePage(grade) {
-            state.grade = grade;
-            document.getElementById('mode-page-title').innerText = grade === 'P3' ? '🌸 三年級中文詞語' : '🌿 六年級中文詞語';
-            
-            document.getElementById('view-home').classList.add('hidden');
-            document.getElementById('view-modes').classList.remove('hidden');
-            document.getElementById('btn-return-home').classList.remove('hidden');
-        }
-
-        function setQuizMode(m) {
-            state.quizMode = m;
-            document.getElementById('opt-mode-mc').classList.toggle('active', m === 'mc');
-            document.getElementById('opt-mode-fill').classList.toggle('active', m === 'fill');
-        }
-
-        function setQuizCount(c) {
-            state.quizCount = c;
-            document.getElementById('opt-count-65').classList.toggle('active', c === 65);
-            document.getElementById('opt-count-50').classList.toggle('active', c === 50);
-            document.getElementById('opt-count-15').classList.toggle('active', c === 15);
-        }
-
-        function startQuiz() {
-            let pool = STRICT_VOCAB_DB[state.grade];
-            
-            if (state.quizCount === 50) {
-                pool = pool.filter(i => i.type === '詞語');
-            } else if (state.quizCount === 15) {
-                pool = pool.filter(i => i.type === '成語');
+            if (!rawPool || rawPool.length === 0) {
+                console.error("找不到相應級別或類別的題庫");
+                return;
             }
 
-            let freshPool = pool.filter(item => !historyWordIds.includes(item.id));
-            if (freshPool.length < state.quizCount) {
-                historyWordIds = [];
-                freshPool = pool;
-            }
+            const targetCount = category === 'idiom' ? 15 : 50;
 
-            freshPool.sort(() => Math.random() - 0.5);
-            let selectedVocabs = freshPool.slice(0, state.quizCount);
-
-            selectedVocabs.forEach(v => {
-                if (!historyWordIds.includes(v.id)) historyWordIds.push(v.id);
-            });
-            if (historyWordIds.length > 250) historyWordIds = historyWordIds.slice(-150);
-            localStorage.setItem('historyWordIds', JSON.stringify(historyWordIds));
-
-            state.questions = selectedVocabs.map(vocab => {
-                const sents = getOrGenerate10Sentences(vocab);
-                const randomSent = sents[Math.floor(Math.random() * sents.length)];
-                return {
-                    id: vocab.id,
-                    word: vocab.word,
-                    type: vocab.type,
-                    def: vocab.def,
-                    sentence: randomSent
-                };
+            const recentHistory = getRecentHistory(gameState.grade, category);
+            const excludedWords = new Set();
+            recentHistory.forEach(run => {
+                if (Array.isArray(run)) {
+                    run.forEach(w => excludedWords.add(w));
+                }
             });
 
-            state.currentIdx = 0;
-            state.score = 0;
+            // 嘗試從未在最近歷史中出現的題目抽取
+            let availablePool = rawPool.filter(item => !excludedWords.has(item.word));
+            
+            // 如果過濾後的題數不足，則直接使用整個原始題庫
+            if (availablePool.length < targetCount) {
+                availablePool = [...rawPool];
+            }
 
-            document.getElementById('view-modes').classList.add('hidden');
-            document.getElementById('view-quiz').classList.remove('hidden');
+            const shuffled = [...availablePool].sort(() => Math.random() - 0.5);
+            gameState.questions = shuffled.slice(0, Math.min(targetCount, shuffled.length));
 
-            document.getElementById('quiz-grade-label').innerText = state.grade === 'P3' ? '🌸 三年級' : '🌿 六年級';
-            document.getElementById('quiz-mode-label').innerText = state.quizMode === 'mc' ? '選擇題' : '不供詞填充題';
-            document.getElementById('quiz-total-count').innerText = state.questions.length;
+            const currentRunWords = gameState.questions.map(q => q.word);
+            saveHistory(gameState.grade, category, currentRunWords);
 
-            renderQuestion();
+            document.getElementById('dashboard-view').classList.add('hidden');
+            document.getElementById('quiz-view').classList.remove('hidden');
+
+            loadQuestion();
         }
 
-        function renderQuestion() {
-            const q = state.questions[state.currentIdx];
-            document.getElementById('quiz-current-idx').innerText = state.currentIdx + 1;
-            document.getElementById('quiz-score').innerText = state.score;
-            document.getElementById('question-tag').innerText = q.type;
+        function loadQuestion() {
+            if (gameState.currentIndex >= gameState.questions.length) {
+                endQuiz();
+                return;
+            }
 
-            const progressPct = (state.currentIdx / state.questions.length) * 100;
-            document.getElementById('quiz-progress-fill').style.width = `${progressPct}%`;
+            const qData = gameState.questions[gameState.currentIndex];
+            gameState.currentQuestion = qData;
 
-            if (state.quizMode === 'mc') {
-                document.getElementById('container-mc-options').classList.remove('hidden');
-                document.getElementById('container-fill-input').classList.add('hidden');
-                document.getElementById('question-text').innerText = q.sentence;
+            const totalQ = gameState.questions.length;
+            const currentNum = gameState.currentIndex + 1;
+            document.getElementById('quiz-progress-text').innerText = `題目: ${currentNum} / ${totalQ}`;
+            document.getElementById('quiz-progress-bar').style.width = `${(currentNum / totalQ) * 100}%`;
+            document.getElementById('quiz-score-display').innerText = `得分: ${gameState.score}`;
+            
+            const currentStage = Math.floor(gameState.currentIndex / 10) + 1;
+            document.getElementById('stage-badge-display').innerText = `階段 Stage ${currentStage}`;
 
-                let options = [q.word];
-                let otherWords = STRICT_VOCAB_DB[state.grade].filter(item => item.word !== q.word).map(item => item.word);
-                otherWords.sort(() => Math.random() - 0.5);
-                options.push(...otherWords.slice(0, 3));
-                options.sort(() => Math.random() - 0.5);
+            const randomSentenceIdx = Math.floor(Math.random() * qData.sentences.length);
+            const fullSentence = qData.sentences[randomSentenceIdx];
+            const maskedSentence = fullSentence.replace(qData.word, "_______");
+            
+            document.getElementById('question-sentence-text').innerText = maskedSentence;
+            document.getElementById('quiz-category-tag').innerText = gameState.category === 'vocab' ? '核心詞語填充' : '成語意境填充';
+            document.getElementById('quiz-mode-badge').innerText = gameState.mode === 'choice' ? '選擇題模式' : '不供詞填充模式';
 
-                const container = document.getElementById('container-mc-options');
-                container.innerHTML = '';
-                options.forEach(opt => {
-                    const btn = document.createElement('button');
-                    btn.className = 'option-btn';
-                    btn.innerText = opt;
-                    btn.onclick = () => handleAnswerResult(opt === q.word, q, opt);
-                    container.appendChild(btn);
-                });
+            if (gameState.mode === 'choice') {
+                document.getElementById('choice-container').classList.remove('hidden');
+                document.getElementById('fill-container').classList.add('hidden');
+                setupChoiceOptions(qData);
             } else {
-                document.getElementById('container-mc-options').classList.add('hidden');
-                document.getElementById('container-fill-input').classList.remove('hidden');
-
-                document.getElementById('question-text').innerHTML = `${q.sentence}<br><br><span style="font-size:0.95rem; color:var(--text-muted);">💡 釋義提示：${q.def}</span>`;
-                document.getElementById('user-fill-answer').value = '';
-                clearCanvas();
+                document.getElementById('choice-container').classList.add('hidden');
+                document.getElementById('fill-container').classList.remove('hidden');
+                document.getElementById('fill-answer-input').value = "";
             }
+        }
+
+        function setupChoiceOptions(correctItem) {
+            const container = document.getElementById('choice-container');
+            container.innerHTML = '';
+
+            const rawPool = curriculumData[gameState.grade][gameState.category];
+            const distractors = rawPool.filter(i => i.word !== correctItem.word)
+                                      .sort(() => Math.random() - 0.5)
+                                      .slice(0, 3);
+            
+            const options = [...distractors, correctItem].sort(() => Math.random() - 0.5);
+
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.type = "button";
+                btn.className = "bg-gray-50 hover:bg-pink-50 border-2 border-gray-200 hover:border-pink-400 font-bold py-4 px-6 rounded-2xl text-lg text-gray-800 transition-all shadow-sm text-center";
+                btn.innerText = opt.word;
+                btn.onclick = () => checkAnswer(opt.word === correctItem.word, correctItem);
+                container.appendChild(btn);
+            });
         }
 
         function submitFillAnswer() {
-            const val = document.getElementById('user-fill-answer').value.trim();
-            const q = state.questions[state.currentIdx];
-            handleAnswerResult(val === q.word, q, val || "(未填寫)");
-        }
-
-        function handleAnswerResult(isCorrect, q, userAns) {
-            if (isCorrect) {
-                state.score += 20;
-                state.cumulativeScore += 20;
-                localStorage.setItem('cumScore', state.cumulativeScore);
-                updateRankUI();
-
-                document.getElementById('modal-feedback-title').innerText = "🌸 回答正確！太棒了！";
-                document.getElementById('modal-feedback-title').style.color = "var(--correct-color)";
-            } else {
-                document.getElementById('modal-feedback-title').innerText = "💡 差一點點，再接再厲！";
-                document.getElementById('modal-feedback-title').style.color = "var(--wrong-color)";
-                state.mistakes.push({
-                    sentence: q.sentence,
-                    word: q.word,
-                    type: q.type,
-                    def: q.def,
-                    userAns: userAns
-                });
-            }
-
-            document.getElementById('modal-pet-avatar').innerText = state.selectedPet.icon;
-            document.getElementById('modal-explanation-body').innerHTML = `
-                <strong>【正確答案】：</strong> <span style="font-size:1.3rem; color:var(--primary-accent); font-weight:900;">${q.word}</span><br>
-                <strong>【詳細解釋】：</strong> ${q.def}<br>
-                <strong>【完整例句】：</strong> ${q.sentence.replace('_____', `<u>${q.word}</u>`)}
-            `;
-
-            document.getElementById('modal-feedback').classList.add('active');
-        }
-
-        function closeFeedbackModal() {
-            document.getElementById('modal-feedback').classList.remove('active');
-            state.currentIdx++;
-
-            if (state.currentIdx > 0 && state.currentIdx % 10 === 0 && state.currentIdx < state.questions.length) {
-                triggerStageModal(false);
-            } else if (state.currentIdx >= state.questions.length) {
-                triggerStageModal(true);
-            } else {
-                renderQuestion();
-            }
-        }
-
-        function triggerStageModal(isFinal) {
-            const pet = state.selectedPet;
-            document.getElementById('modal-stage-pet').innerText = pet.icon;
-            
-            if (isFinal) {
-                document.getElementById('modal-stage-title').innerText = "🏆 恭喜大成功！順利通關！";
-                document.getElementById('modal-stage-subtitle').innerText = `玩家 ${state.playerName} 完成了全部挑戰！`;
-                document.getElementById('modal-stage-content').innerHTML = `
-                    ${pet.name} 為你喝彩：「太厲害了！所有題目都挑戰成功！你的頭銜已升級為『${getRankTitle(state.cumulativeScore)}』！」<br><br>
-                    <strong>本局得分：${state.score} 分 | 累計總分：${state.cumulativeScore} 分</strong>
-                `;
-                renderParallelLeaderboards();
-            } else {
-                const stageNum = state.currentIdx / 10;
-                document.getElementById('modal-stage-title').innerText = `🌸 第 ${stageNum} 階段完成！休息驛站`;
-                document.getElementById('modal-stage-subtitle').innerText = `已連續挑戰了 ${state.currentIdx} 題！`;
-                document.getElementById('modal-stage-content').innerHTML = `
-                    ${pet.name} 躍跳着對你說：「太棒了！喝口水伸展一下，點擊按鈕繼續挑戰！」
-                `;
-            }
-
-            document.getElementById('modal-stage').classList.add('active');
-        }
-
-        function closeStageModal() {
-            document.getElementById('modal-stage').classList.remove('active');
-            if (state.currentIdx >= state.questions.length) {
-                confirmReturnHome(true);
-            } else {
-                renderQuestion();
-            }
-        }
-
-        /* 順暢安全「放棄退出」機制修復 */
-        function confirmReturnHome(force = false) {
-            if (force || confirm("確定要放棄並返回主選單嗎？累計分數將會被安全保存！")) {
-                document.querySelectorAll('.modal-overlay').forEach(m => {
-                    if (m.id !== 'modal-welcome') m.classList.remove('active');
-                });
-                
-                document.getElementById('view-quiz').classList.add('hidden');
-                document.getElementById('view-modes').classList.add('hidden');
-                document.getElementById('view-home').classList.remove('hidden');
-                document.getElementById('btn-return-home').classList.add('hidden');
-            }
-        }
-
-        function renderParallelLeaderboards() {
-            let mockLB = {
-                P3: [
-                    { name: state.playerName, score: state.cumulativeScore, title: getRankTitle(state.cumulativeScore) },
-                    { name: "小明", score: 980, title: "成語舉人 📜" },
-                    { name: "一心", score: 850, title: "成語舉人 📜" }
-                ],
-                P6: [
-                    { name: "子軒", score: 1420, title: "成語舉人 📜" },
-                    { name: "詠琪", score: 1180, title: "成語舉人 📜" },
-                    { name: "家豪", score: 1050, title: "成語舉人 📜" }
-                ]
-            };
-
-            ['P3', 'P6'].forEach(g => {
-                const tbody = document.getElementById(`lb-${g.toLowerCase()}-body`);
-                tbody.innerHTML = '';
-                mockLB[g].sort((a,b) => b.score - a.score).slice(0, 5).forEach((item, idx) => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${idx === 0 ? '🥇 1' : idx === 1 ? '🥈 2' : '🥉 3'}</td>
-                        <td><strong>${item.name}</strong></td>
-                        <td style="color:var(--primary-accent); font-weight:700;">${item.score}</td>
-                        <td><span class="rank-badge">${item.title}</span></td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            });
-        }
-
-        function showMistakesModal() {
-            const body = document.getElementById('mistakes-list-body');
-            if (state.mistakes.length === 0) {
-                body.innerHTML = "<p style='text-align:center;'>🎉 暫時沒有錯題紀錄！繼續保持！</p>";
-            } else {
-                body.innerHTML = state.mistakes.map((m, idx) => `
-                    <div class="mistake-card-item">
-                        <div style="font-weight:700; color:var(--secondary-accent); margin-bottom:4px;">
-                            ${idx + 1}. [${m.type}] ${m.sentence}
-                        </div>
-                        <div style="color:var(--wrong-color); font-weight:700;">
-                            ❌ 你的答案：${m.userAns}
-                        </div>
-                        <div style="color:var(--correct-color); font-weight:700;">
-                            ✅ 正確答案：${m.word}
-                        </div>
-                        <div style="color:var(--text-dark); font-size:0.88rem; margin-top:4px; background:var(--pastel-purple-light); padding:6px 10px; border-radius:8px;">
-                            💡 釋義解釋：${m.def}
-                        </div>
-                    </div>
-                `).join('');
-            }
-            document.getElementById('modal-mistakes').classList.add('active');
-        }
-
-        function closeMistakesModal() {
-            document.getElementById('modal-mistakes').classList.remove('active');
-        }
-
-        function downloadMistakes() {
-            if (state.mistakes.length === 0) {
-                alert("目前沒有錯題紀錄可供下載！");
+            const inputVal = document.getElementById('fill-answer-input').value.trim();
+            if (!inputVal) {
                 return;
             }
-            let text = `🌸 小學中文詞語成語大冒險 - 我的錯題集 (${state.playerName})\n`;
-            text += `下載日期: ${new Date().toLocaleDateString()}\n`;
-            text += `===========================================\n\n`;
-            state.mistakes.forEach((m, i) => {
-                text += `【題目 ${i+1}】[${m.type}] ${m.sentence}\n`;
-                text += `   ❌ 你的答案：${m.userAns}\n`;
-                text += `   ✅ 正確答案：${m.word}\n`;
-                text += `   💡 詳細解釋：${m.def}\n\n`;
+            const correctWord = gameState.currentQuestion.word;
+            checkAnswer(inputVal === correctWord, gameState.currentQuestion);
+        }
+
+        function checkAnswer(isCorrect, qData) {
+            if (isCorrect) {
+                gameState.score += 10;
+                document.getElementById('feedback-icon').innerText = "🎉";
+                document.getElementById('feedback-title').innerText = "答對了！太棒啦！";
+                document.getElementById('feedback-msg').innerHTML = `你真聰明！正確答案是：<span class="text-pink-600 font-bold">${qData.word}</span>`;
+            } else {
+                document.getElementById('feedback-icon').innerText = "💡";
+                document.getElementById('feedback-title').innerText = "再接再厲！";
+                document.getElementById('feedback-msg').innerHTML = `正確答案是：<span class="text-pink-600 font-bold">${qData.word}</span>`;
+                recordMistake(qData);
+            }
+
+            const correctSpan = document.getElementById('correct-word-span');
+            if (correctSpan) {
+                correctSpan.innerText = qData.word;
+            }
+            document.getElementById('feedback-definition').innerText = qData.definition;
+            document.getElementById('feedback-modal').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            document.getElementById('feedback-modal').classList.add('hidden');
+            gameState.currentIndex++;
+
+            if (gameState.currentIndex > 0 && gameState.currentIndex % 10 === 0 && gameState.currentIndex < gameState.questions.length) {
+                const completedStage = Math.floor(gameState.currentIndex / 10);
+                document.getElementById('stage-break-title').innerText = `階段 Stage ${completedStage} 完成！`;
+                document.getElementById('stage-break-desc').innerText = `太厲害了！你已經順利完成了 ${gameState.currentIndex} 道題目，${gameState.pet} 陪你休息一下，喝杯水再繼續下一階段吧！`;
+                document.getElementById('stage-break-modal').classList.remove('hidden');
+                return;
+            }
+
+            loadQuestion();
+        }
+
+        function resumeQuiz() {
+            document.getElementById('stage-break-modal').classList.add('hidden');
+            loadQuestion();
+        }
+
+        function endQuiz() {
+            document.getElementById('quiz-view').classList.add('hidden');
+            
+            const summary = `你已完成本次 ${gameState.questions.length} 道題目的冒險！`;
+            document.getElementById('game-over-summary').innerText = summary;
+            
+            const title = getRankTitle(gameState.score);
+            document.getElementById('final-title-badge').innerText = `獲得頭銜：${title}`;
+            document.getElementById('final-score-text').innerText = `最終得分: ${gameState.score} 分`;
+
+            saveLeaderboardScore(gameState.grade, gameState.playerName, gameState.score);
+            document.getElementById('game-over-modal').classList.remove('hidden');
+        }
+
+        function restartSameQuiz() {
+            document.getElementById('game-over-modal').classList.add('hidden');
+            launchQuiz(gameState.category, gameState.mode);
+        }
+
+        function getLeaderboardKey(grade) {
+            return `adv_leaderboard_p${grade}`;
+        }
+
+        function saveLeaderboardScore(grade, name, score) {
+            const key = getLeaderboardKey(grade);
+            let lb = [];
+            try {
+                const data = localStorage.getItem(key);
+                if (data) lb = JSON.parse(data);
+            } catch (e) {}
+
+            lb.push({ name: name, score: score, date: new Date().toLocaleDateString() });
+            lb.sort((a, b) => b.score - a.score);
+            lb = lb.slice(0, 5);
+            localStorage.setItem(key, JSON.stringify(lb));
+        }
+
+        function renderLeaderboards() {
+            [3, 6].forEach(grade => {
+                const container = document.getElementById(`leaderboard-p${grade}`);
+                if (!container) return;
+                container.innerHTML = '';
+                
+                let lb = [];
+                try {
+                    const data = localStorage.getItem(getLeaderboardKey(grade));
+                    if (data) lb = JSON.parse(data);
+                } catch (e) {}
+
+                if (lb.length === 0) {
+                    container.innerHTML = `<p class="text-xs text-gray-400 py-2 text-center">暫無英雄榜記錄，快來挑戰吧！</p>`;
+                    return;
+                }
+
+                lb.forEach((entry, idx) => {
+                    const div = document.createElement('div');
+                    div.className = "flex items-center justify-between p-3 bg-gray-50 rounded-2xl text-sm";
+                    div.innerHTML = `
+                        <div class="flex items-center space-x-3">
+                            <span class="font-black text-pink-500 w-5">#${idx + 1}</span>
+                            <span class="font-bold text-gray-700">${entry.name}</span>
+                        </div>
+                        <span class="font-black text-gray-800">${entry.score} 分</span>
+                    `;
+                    container.appendChild(div);
+                });
+            });
+        }
+
+        function recordMistake(qData) {
+            let mistakes = [];
+            try {
+                const data = localStorage.getItem('adv_mistakes');
+                if (data) mistakes = JSON.parse(data);
+            } catch (e) {}
+
+            if (!mistakes.some(m => m.word === qData.word)) {
+                mistakes.push(qData);
+                localStorage.setItem('adv_mistakes', JSON.stringify(mistakes));
+            }
+        }
+
+        function loadMistakes() {
+            const container = document.getElementById('mistake-list-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            let mistakes = [];
+            try {
+                const data = localStorage.getItem('adv_mistakes');
+                if (data) mistakes = JSON.parse(data);
+            } catch (e) {}
+
+            if (mistakes.length === 0) {
+                container.innerHTML = `<p class="text-center text-gray-400 py-6 text-sm">太棒了！目前沒有錯題記錄，繼續保持！</p>`;
+                return;
+            }
+
+            mistakes.forEach((m, idx) => {
+                const div = document.createElement('div');
+                div.className = "p-4 bg-amber-50/50 rounded-2xl border border-amber-100";
+                div.innerHTML = `
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="font-black text-amber-800 text-base">${m.word}</span>
+                        <span class="text-xs text-gray-400">錯題 #${idx + 1}</span>
+                    </div>
+                    <p class="text-xs text-gray-600 mb-1"><strong>釋義：</strong>${m.definition}</p>
+                    <p class="text-xs text-gray-500 italic">例句：${m.sentences[0]}</p>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function openMistakeModal() {
+            loadMistakes();
+            document.getElementById('mistake-modal').classList.remove('hidden');
+        }
+
+        function closeMistakeModal() {
+            document.getElementById('mistake-modal').classList.add('hidden');
+        }
+
+        function clearMistakeNotebook() {
+            localStorage.removeItem('adv_mistakes');
+            loadMistakes();
+        }
+
+        function exportMistakeNotebook() {
+            let mistakes = [];
+            try {
+                const data = localStorage.getItem('adv_mistakes');
+                if (data) mistakes = JSON.parse(data);
+            } catch (e) {}
+
+            if (mistakes.length === 0) return;
+
+            let textContent = "=== 詞語大冒險：我的專屬錯題筆記本 ===\n\n";
+            mistakes.forEach((m, i) => {
+                textContent += `${i + 1}. 詞語/成語：${m.word}\n`;
+                textContent += `   釋義：${m.definition}\n`;
+                textContent += `   例句：${m.sentences[0]}\n\n`;
             });
 
-            const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+            const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = `${state.playerName}_錯題集.txt`;
+            a.href = url;
+            a.download = 'Chinese_Adventure_Mistakes.txt';
             a.click();
-        }
-
-        /* Canvas 手寫板 Logic */
-        function initCanvas() {
-            const canvas = document.getElementById('hw-canvas');
-            state.canvasCtx = canvas.getContext('2d');
-            state.canvasCtx.lineWidth = 4;
-            state.canvasCtx.lineCap = 'round';
-            state.canvasCtx.strokeStyle = '#4A4A6A';
-
-            canvas.addEventListener('mousedown', (e) => {
-                state.isDrawing = true;
-                const rect = canvas.getBoundingClientRect();
-                state.canvasCtx.beginPath();
-                state.canvasCtx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
-            });
-            canvas.addEventListener('mousemove', (e) => {
-                if (!state.isDrawing) return;
-                const rect = canvas.getBoundingClientRect();
-                state.canvasCtx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
-                state.canvasCtx.stroke();
-            });
-            canvas.addEventListener('mouseup', () => state.isDrawing = false);
-
-            canvas.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                const touch = e.touches[0];
-                const rect = canvas.getBoundingClientRect();
-                state.isDrawing = true;
-                state.canvasCtx.beginPath();
-                state.canvasCtx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
-            });
-            canvas.addEventListener('touchmove', (e) => {
-                e.preventDefault();
-                if (!state.isDrawing) return;
-                const touch = e.touches[0];
-                const rect = canvas.getBoundingClientRect();
-                state.canvasCtx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
-                state.canvasCtx.stroke();
-            });
-            canvas.addEventListener('touchend', () => state.isDrawing = false);
-        }
-
-        function clearCanvas() {
-            const canvas = document.getElementById('hw-canvas');
-            if (state.canvasCtx) state.canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+            URL.revokeObjectURL(url);
         }
     </script>
 </body>
